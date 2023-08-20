@@ -51,3 +51,5 @@ const colors = {
     DISABLED: "#464C53",
   },
 };
+
+export default colors;

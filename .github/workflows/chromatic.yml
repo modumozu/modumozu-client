@@ -15,7 +15,7 @@ jobs:
     # Job steps
     steps:
       - uses: actions/checkout@v1
-      - run: pnpm install
+      - run: npm i pnpm
       - run: pnpm
         #👇 Adds Chromatic as a step in the workflow
       - uses: chromaui/action@v1

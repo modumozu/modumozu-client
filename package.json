@@ -13,6 +13,7 @@
     "chromatic": "npx chromatic --project-token=chpt_a2dbd92234c64c2"
   },
   "dependencies": {
+    "@storybook/addon-viewport": "^7.4.0",
     "@types/node": "20.4.10",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",

@@ -1,7 +1,8 @@
 import StyledComponentsRegistry from "@/lib/registry";
-import "./globals.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import GlobalStyle from "@/styles/GlobalCss";
+import "./globals.css";
 
 // Font files can be colocated inside of `app`
 const myFont = localFont({
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ko" className={myFont.className}>
       <body>
+        <GlobalStyle />
         <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </body>
     </html>

@@ -31,6 +31,8 @@ export const Primary: Story = {
     color: "primary",
     fill: true,
     children: "버튼인데요",
+    size: "large",
+    shape: "rectangle",
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

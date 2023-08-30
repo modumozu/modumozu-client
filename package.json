@@ -13,6 +13,7 @@
     "chromatic": "npx chromatic --project-token=chpt_a2dbd92234c64c2"
   },
   "dependencies": {
+    "@storybook/addon-viewport": "^7.4.0",
     "@types/node": "20.4.10",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
@@ -38,7 +39,8 @@
     "@storybook/testing-library": "^0.2.0",
     "chromatic": "^6.23.0",
     "eslint-plugin-storybook": "^0.6.13",
-    "storybook": "^7.2.3"
+    "storybook": "^7.2.3",
+    "tsconfig-paths-webpack-plugin": "^4.1.0"
   },
   "readme": "ERROR: No README data found!",
   "_id": "modumozu@0.1.0"

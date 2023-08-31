@@ -18,7 +18,11 @@ const colors = {
     DISABLED: "#C9CDD2",
     SUCCESS: "#3EA5F9",
     WARNING: "#FFDE0A",
-    DANGER: "#FF5619",
+    ACCENT: "#FF3B3C",
+  },
+  FONT: {
+    PRIMARY: "#2D5BEE",
+    ACCENT: "#FF3B3C",
   },
   FONT_LIGHT: {
     PRIMARY: "#1B1D1F",

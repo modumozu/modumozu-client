@@ -21,15 +21,16 @@ export const Primary: Story = {
     children: (
       <>
         <UpcomingStock.status status={true}>gd</UpcomingStock.status>
-        <UpcomingStock.card
+        <UpcomingStock.cardWrap
           title="에이치엠씨아이비스팩6호"
           love={true}
           category="의료장비 및 서비스"
           account="대신증권"
           price={[26000, 31000]}
+          subscription="limit"
         >
           안뇽
-        </UpcomingStock.card>
+        </UpcomingStock.cardWrap>
       </>
     ),
   },

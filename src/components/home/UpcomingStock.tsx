@@ -58,8 +58,10 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
       case "able":
         return (
           <UpcomingStockSubscriptionWrap>
-            <UpcomingStockSubscriptionDateText>{date}</UpcomingStockSubscriptionDateText>
-            <UpcomingStockSubscriptionText>까지 계좌를 개설해주세요.</UpcomingStockSubscriptionText>
+            <span>
+              <UpcomingStockSubscriptionDateText>{date}</UpcomingStockSubscriptionDateText>
+              <UpcomingStockSubscriptionText>까지 계좌를 개설해주세요.</UpcomingStockSubscriptionText>
+            </span>
             <Button shape="round" size="small" onClick={onClick}>
               계좌 개설
             </Button>
@@ -68,11 +70,11 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
       case "disable":
         return (
           <UpcomingStockSubscriptionWrap>
-            <span>
+            <UpcomingStockSubscriptionDisableWrap>
               <DangerIcon />
               <UpcomingStockSubscriptionDisableText>청약불가</UpcomingStockSubscriptionDisableText>
-            </span>
-            <UpcomingStockSubscriptionText>계좌 개설 가능 기간이 지났어요.</UpcomingStockSubscriptionText>
+              <UpcomingStockSubscriptionText>계좌 개설 가능 기간이 지났어요.</UpcomingStockSubscriptionText>
+            </UpcomingStockSubscriptionDisableWrap>
           </UpcomingStockSubscriptionWrap>
         );
       case "limit":
@@ -89,6 +91,7 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
     }
   };
 
+  // TODO 보유한 계좌의 데이터가 어떤 형식으로 오는지 에상이 안되서 아직 개발 x
   return (
     <UpcomingStockCardWarp>
       <UpcomingStockCardTop>
@@ -157,6 +160,8 @@ const UpcomingStockCardTopTitle = styled.strong`
 `;
 const UpcomingStockCardInfos = styled.ul`
   margin-top: 20px;
+  ${getFonts("H6_REGULAR")}
+  color:${colors.FONT_LIGHT.PRIMARY}
 `;
 const UpcomingStockCardInfoItem = styled.li`
   display: flex;
@@ -190,6 +195,10 @@ const UpcomingStockSubscriptionWrap = styled.div`
 const UpcomingStockSubscriptionText = styled.span`
   ${getFonts("H6_REGULAR")}
   color:${colors.FONT_LIGHT.SECONDARY};
+`;
+const UpcomingStockSubscriptionDisableWrap = styled.span`
+  display: inline-flex;
+  align-items: center;
 `;
 const UpcomingStockSubscriptionDisableText = styled.span`
   ${getFonts("H6_SEMIBOLD")}

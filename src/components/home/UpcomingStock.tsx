@@ -28,16 +28,12 @@ interface UpcomingStockCardProps {
   date?: string;
   onClick?: () => void;
 }
-interface UpcomingStockSubscriptionProps {
-  subscription: Subscription;
-  onClick: () => void;
-  date: string;
-}
 
 const UpcomingStockMain: FC<UpcomingStockProps> = ({ children }) => {
   return <article>{children}</article>;
 };
 const UpcomingStockStatus: FC<UpcomingStockStatusProps> = ({ status, children }) => {
+  // TODO 날짜 어떻게 처리할 지
   if (status) {
     return (
       <UpcomingStockStatusWrap>
@@ -55,7 +51,43 @@ const UpcomingStockStatus: FC<UpcomingStockStatusProps> = ({ status, children })
   );
 };
 const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
-  const { category, title, price, love, account, subscription, onClick = () => {}, date = "" } = props;
+  const { category, title, price, love, account, subscription, onClick, date = "" } = props;
+
+  const renderSubscription = () => {
+    switch (subscription) {
+      case "able":
+        return (
+          <UpcomingStockSubscriptionWrap>
+            <UpcomingStockSubscriptionDateText>{date}</UpcomingStockSubscriptionDateText>
+            <UpcomingStockSubscriptionText>까지 계좌를 개설해주세요.</UpcomingStockSubscriptionText>
+            <Button shape="round" size="small" onClick={onClick}>
+              계좌 개설
+            </Button>
+          </UpcomingStockSubscriptionWrap>
+        );
+      case "disable":
+        return (
+          <UpcomingStockSubscriptionWrap>
+            <span>
+              <DangerIcon />
+              <UpcomingStockSubscriptionDisableText>청약불가</UpcomingStockSubscriptionDisableText>
+            </span>
+            <UpcomingStockSubscriptionText>계좌 개설 가능 기간이 지났어요.</UpcomingStockSubscriptionText>
+          </UpcomingStockSubscriptionWrap>
+        );
+      case "limit":
+        return (
+          <UpcomingStockSubscriptionWrap>
+            <UpcomingStockSubscriptionText>신규 계좌 개설이 제한되었습니다.</UpcomingStockSubscriptionText>
+            <Button color="secondary" shape="round" size="small" onClick={onClick}>
+              계좌 개설
+            </Button>
+          </UpcomingStockSubscriptionWrap>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <UpcomingStockCardWarp>
@@ -64,9 +96,11 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
           <UpcomingStockCardTopCategory>{category}</UpcomingStockCardTopCategory>
           <UpcomingStockCardTopTitle>{title}</UpcomingStockCardTopTitle>
         </div>
-        <div>
-          <HeartIcon color={colors.ON.PRIMARY} />
-        </div>
+        {love && (
+          <div>
+            <HeartIcon color={colors.ON.PRIMARY} />
+          </div>
+        )}
       </UpcomingStockCardTop>
       <UpcomingStockCardInfos>
         <UpcomingStockCardInfoItem>
@@ -85,47 +119,15 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
           </UpcomingStockCardInfoAccountList>
         </UpcomingStockCardInfoItem>
       </UpcomingStockCardInfos>
-      {!!subscription && <UpcomingStockSubscription subscription={subscription} onClick={onClick} date={date} />}
+      {!!subscription && renderSubscription()}
     </UpcomingStockCardWarp>
   );
-};
-const UpcomingStockSubscription: FC<UpcomingStockSubscriptionProps> = (props) => {
-  const { subscription, date = "", onClick = () => {} } = props;
-  switch (subscription) {
-    case "able":
-      return (
-        <UpcomingStockFooterWrap>
-          <span>{`${date} 까지 계좌를 개설해주세요.`}</span>
-          <Button shape="round" size="small">
-            계좌 개설
-          </Button>
-        </UpcomingStockFooterWrap>
-      );
-    case "disable":
-      return (
-        <UpcomingStockFooterWrap>
-          <DangerIcon />
-          <span>청약불가</span>
-          <span>계좌 개설 가능 기간이 지났어요.</span>
-        </UpcomingStockFooterWrap>
-      );
-    case "limit":
-      return (
-        <UpcomingStockFooterWrap>
-          <span>신규 계좌 개설이 제한되었습니다.</span>
-          <Button color="secondary" shape="round" size="small">
-            계좌 개설
-          </Button>
-        </UpcomingStockFooterWrap>
-      );
-    default:
-      return null;
-  }
 };
 
 const UpcomingStockStatusWrap = styled.div`
   display: flex;
   align-items: center;
+  ${getFonts("H6_SEMIBOLD")}
 `;
 const Dot = styled.div`
   width: 6px;
@@ -136,8 +138,8 @@ const Dot = styled.div`
 `;
 
 const UpcomingStockStatusLabel = styled.span<{ color: string }>`
-  color: ${({ color }) => color};
   margin-right: 6px;
+  color: ${({ color }) => color};
 `;
 
 const UpcomingStockCardTop = styled.div`
@@ -146,10 +148,12 @@ const UpcomingStockCardTop = styled.div`
 `;
 const UpcomingStockCardTopCategory = styled.span`
   color: ${colors.FONT.PRIMARY};
+  ${getFonts("CAPTION1_SEMIBOLD")}
 `;
 const UpcomingStockCardTopTitle = styled.strong`
   display: block;
   margin-top: 3px;
+  ${getFonts("H3_SEMIBOLD")}
 `;
 const UpcomingStockCardInfos = styled.ul`
   margin-top: 20px;
@@ -160,12 +164,14 @@ const UpcomingStockCardInfoItem = styled.li`
   & + & {
     margin-top: 7px;
   }
+  ${getFonts("H6_REGULAR")}
 `;
 const UpcomingStockCardInfoAccountList = styled.ul``;
 const UpcomingStockCardInfoAccountListItem = styled.li`
   & + & {
     margin-top: 3px;
   }
+  ${getFonts("H6_REGULAR")}
 `;
 const UpcomingStockCardWarp = styled.div`
   margin-top: 12px;
@@ -173,14 +179,28 @@ const UpcomingStockCardWarp = styled.div`
   border-radius: 16px;
   box-shadow: 0px 1px 8px 0px rgba(27, 29, 31, 0.08);
 `;
-const UpcomingStockFooterWrap = styled.div`
+const UpcomingStockSubscriptionWrap = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-top: 18px;
   padding-top: 16px;
   border-top: 1px solid ${colors.GRAY[2]};
 `;
-
+const UpcomingStockSubscriptionText = styled.span`
+  ${getFonts("H6_REGULAR")}
+  color:${colors.FONT_LIGHT.SECONDARY};
+`;
+const UpcomingStockSubscriptionDisableText = styled.span`
+  ${getFonts("H6_SEMIBOLD")}
+  margin-left: 2px;
+  margin-right: 8px;
+  color: ${colors.FONT_LIGHT.PRIMARY};
+`;
+const UpcomingStockSubscriptionDateText = styled.span`
+  ${getFonts("H6_SEMIBOLD")}
+  color: ${colors.FONT_LIGHT.PRIMARY};
+`;
 export default Object.assign(UpcomingStockMain, {
   status: UpcomingStockStatus,
   cardWrap: UpcomingStockCard,

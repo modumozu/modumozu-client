@@ -108,7 +108,7 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
       <UpcomingStockCardInfos>
         <UpcomingStockCardInfoItem>
           <MoneyIcon />
-          <span>{`${price[0]} ~ ${price[1]}`}</span>
+          <span>{`${price[0].toLocaleString()}원 ~ ${price[1].toLocaleString()}원`}</span>
         </UpcomingStockCardInfoItem>
         <UpcomingStockCardInfoItem>
           <BankIcon />

@@ -81,31 +81,16 @@ export const fonts = {
   },
   H6_BOLD: {
     size: "14px",
-    weight: 400,
+    weight: 700,
     height: "19px",
   },
-  H6_SEMIBOL: {
+  H6_SEMIBOLD: {
     size: "14px",
-    weight: 400,
+    weight: 600,
     height: "19px",
   },
   H6_REGULAR: {
     size: "14px",
-    weight: 400,
-    height: "19px",
-  },
-  H5_BOLD: {
-    size: "15px",
-    weight: 700,
-    height: "19px",
-  },
-  H5_SEMIBOLD: {
-    size: "15px",
-    weight: 600,
-    height: "19px",
-  },
-  H5_REGULAR: {
-    size: "15px",
     weight: 400,
     height: "19px",
   },

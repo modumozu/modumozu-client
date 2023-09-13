@@ -5,6 +5,7 @@ import DetailHeader from "@/components/detail/DetailHeader";
 import DetailTitle from "@/components/detail/DetailTitle";
 import IPOConfirm from "@/components/detail/IPOConfirm";
 import IPOInfo from "@/components/detail/IPOInfo";
+import IPOTapMenu from "@/components/detail/IPOTapMenu";
 import POInfo from "@/components/detail/POInfo";
 
 const Detail = () => {
@@ -17,7 +18,7 @@ const Detail = () => {
           <IPOInfo />
         </DetailCard.item>
         <DetailCard.item>
-          <IPOInfo />
+          <IPOTapMenu />
         </DetailCard.item>
         <DetailCard.item>
           <POInfo />

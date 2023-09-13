@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "pretendard";
+  src: url("../app/PretendardVariable.woff2");
+}
+
 html,
 body,
 div,

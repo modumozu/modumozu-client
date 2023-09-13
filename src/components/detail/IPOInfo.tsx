@@ -1,33 +1,55 @@
 "use client";
 
+import colors from "@/styles/colors";
+import { getFonts } from "@/styles/fonts";
+import CaretIcon from "@/svg/CaretIcon";
+import GuideIcon from "@/svg/GuideIcon";
 import styled from "styled-components";
 
 const IPOInfo = () => {
   return (
     <IPOInfoWrap>
       <IPOInfoTable>
-        <tbody>
-          <IPOInfoTr>
-            <IPOInfoTd>주관사</IPOInfoTd>
-            <IPOInfoTd>주관사</IPOInfoTd>
-          </IPOInfoTr>
-          <IPOInfoTr>
-            <IPOInfoTd>공모가</IPOInfoTd>
-            <IPOInfoTd>공모가</IPOInfoTd>
-          </IPOInfoTr>
-          <IPOInfoTr>
-            <IPOInfoTd>청약증거금율</IPOInfoTd>
-            <IPOInfoTd>청약증거금율</IPOInfoTd>
-          </IPOInfoTr>
-          <IPOInfoTr>
-            <IPOInfoTd>기관투자자 경쟁률</IPOInfoTd>
-            <IPOInfoTd>기관투자자 경쟁률</IPOInfoTd>
-          </IPOInfoTr>
-          <IPOInfoTr>
-            <IPOInfoTd>의무보유 확약률</IPOInfoTd>
-            <IPOInfoTd>의무보유 확약률</IPOInfoTd>
-          </IPOInfoTr>
-        </tbody>
+        <IPOInfoRow>
+          <IPOIntoLabel>주관사</IPOIntoLabel>
+          <IPOInfoValue>
+            <ul>
+              <li>KB증권</li>
+              <li>대신증권</li>
+              <li>미래에셋증권</li>
+            </ul>
+          </IPOInfoValue>
+        </IPOInfoRow>
+        <IPOInfoRow>
+          <IPOIntoLabel>공모가</IPOIntoLabel>
+          <IPOInfoValue>공모가</IPOInfoValue>
+        </IPOInfoRow>
+        <IPOInfoRow>
+          <IPOIntoLabel>
+            청약증거금율
+            <GuideIcon />
+          </IPOIntoLabel>
+          <IPOInfoValue>50%</IPOInfoValue>
+        </IPOInfoRow>
+        <IPOInfoRow>
+          <IPOIntoLabel>
+            기관투자자 경쟁률
+            <GuideIcon />
+          </IPOIntoLabel>
+          <IPOInfoValue>
+            516 : 1<CaretButton onClick={() => console.log("hihihi")} width={16} height={16} />
+          </IPOInfoValue>
+        </IPOInfoRow>
+        <IPOInfoRow>
+          <IPOIntoLabel>
+            의무보유 확약률
+            <GuideIcon />
+          </IPOIntoLabel>
+          <IPOInfoValue>
+            의무보유 확약률
+            <CaretButton onClick={() => console.log("hihihi")} width={16} height={16} />
+          </IPOInfoValue>
+        </IPOInfoRow>
       </IPOInfoTable>
     </IPOInfoWrap>
   );
@@ -39,11 +61,29 @@ const IPOInfoWrap = styled.div`
   padding: 40px 16px 32px 16px;
 `;
 
-const IPOInfoTable = styled.table`
+const IPOInfoTable = styled.ul`
   width: 100%;
 `;
-const IPOInfoTr = styled.tr`
+const IPOInfoRow = styled.li`
   display: flex;
   gap: 0 24px;
+  & + & {
+    margin-top: 16px;
+  }
 `;
-const IPOInfoTd = styled.td``;
+const IPOIntoLabel = styled.div`
+  width: 128px;
+  display: flex;
+  align-items: flex-start;
+  gap: 0 2px;
+  ${getFonts("H5_REGULAR")}
+  color:${colors.FONT_LIGHT.SECONDARY};
+`;
+const IPOInfoValue = styled.div`
+  ${getFonts("H5_MEDIUM")}
+  color:${colors.FONT_LIGHT.PRIMARY};
+`;
+const CaretButton = styled(CaretIcon.right)`
+  margin-left: 2px;
+  cursor: pointer;
+`;

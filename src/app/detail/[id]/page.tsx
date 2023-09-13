@@ -3,6 +3,9 @@
 import DetailCard from "@/components/detail/DetailCard";
 import DetailHeader from "@/components/detail/DetailHeader";
 import DetailTitle from "@/components/detail/DetailTitle";
+import IPOConfirm from "@/components/detail/IPOConfirm";
+import IPOInfo from "@/components/detail/IPOInfo";
+import POInfo from "@/components/detail/POInfo";
 
 const Detail = () => {
   return (
@@ -10,9 +13,18 @@ const Detail = () => {
       <DetailHeader />
       <DetailTitle date="18" name="큐리옥스바이오시스템즈" category="내구 소비재 및 의류" />
       <DetailCard.wrapper>
-        <DetailCard.item>dd</DetailCard.item>
-        <DetailCard.item>dd</DetailCard.item>
-        <DetailCard.item>dd</DetailCard.item>
+        <DetailCard.item>
+          <IPOInfo />
+        </DetailCard.item>
+        <DetailCard.item>
+          <IPOInfo />
+        </DetailCard.item>
+        <DetailCard.item>
+          <POInfo />
+        </DetailCard.item>
+        <DetailCard.item>
+          <IPOConfirm />
+        </DetailCard.item>
       </DetailCard.wrapper>
     </div>
   );

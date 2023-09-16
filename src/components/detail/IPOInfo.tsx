@@ -11,7 +11,7 @@ const IPOInfo = () => {
     <IPOInfoWrap>
       <IPOInfoTable>
         <IPOInfoRow>
-          <IPOIntoLabel>주관사</IPOIntoLabel>
+          <IPOIntoLabel>주간사</IPOIntoLabel>
           <IPOInfoValue>
             <ul>
               <li>KB증권</li>

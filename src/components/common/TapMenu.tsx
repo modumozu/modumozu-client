@@ -16,7 +16,7 @@ interface TapMenuProps {
   /**
    * 버튼목록에 들어갈 값 배열
    */
-  options: TapMenuOption[];
+  options: [TapMenuOption, TapMenuOption];
   /**
    * 값 변경 콜백
    */

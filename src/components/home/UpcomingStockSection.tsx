@@ -2,7 +2,7 @@
 
 import { styled } from "styled-components";
 import { getFonts } from "@/styles/fonts";
-import ScopeBar from "../common/ScopeBar";
+import TapMenu from "../common/TapMenu";
 import { useState } from "react";
 import UpcomingStock from "./UpcomingStock";
 
@@ -76,16 +76,24 @@ const UpcomingStockSection = () => {
     ? upcomingStockData
     : upcomingStockData.filter((data) => data.subscription !== "disable");
 
+  const handleChangeTapMenu = (value: boolean) => {
+    setIsShowingAllStocks(value);
+  };
   return (
     <section>
       <TitleWrapper>
         <Title>다가오는 공모주</Title>
       </TitleWrapper>
-      <ScopeBar
-        isShowingAllStocks={isShowingAllStocks}
-        setIsShowingAllStocks={setIsShowingAllStocks}
-        allStocksCount={5}
-        availableStocksCount={4}
+      <TapMenu
+        onChange={handleChangeTapMenu}
+        value={isShowingAllStocks}
+        options={[
+          { label: `청약 가능한 공모주${5}`, value: true },
+          {
+            label: `전체 공모주${4}`,
+            value: false,
+          },
+        ]}
       />
       <UpcomingStockList>
         {filteredUpcomingStockData.map((data) => (

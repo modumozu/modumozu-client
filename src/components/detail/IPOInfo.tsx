@@ -9,7 +9,7 @@ import styled from "styled-components";
 const IPOInfo = () => {
   return (
     <IPOInfoWrap>
-      <IPOInfoTable>
+      <IPOInfoList>
         <IPOInfoRow>
           <IPOIntoLabel>주간사</IPOIntoLabel>
           <IPOInfoValue>
@@ -50,7 +50,7 @@ const IPOInfo = () => {
             <CaretButton onClick={() => console.log("hihihi")} width={16} height={16} />
           </IPOInfoValue>
         </IPOInfoRow>
-      </IPOInfoTable>
+      </IPOInfoList>
     </IPOInfoWrap>
   );
 };
@@ -61,7 +61,7 @@ const IPOInfoWrap = styled.div`
   padding: 40px 16px 32px 16px;
 `;
 
-const IPOInfoTable = styled.ul`
+const IPOInfoList = styled.ul`
   width: 100%;
 `;
 const IPOInfoRow = styled.li`

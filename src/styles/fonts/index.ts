@@ -248,7 +248,7 @@ export const getFonts = (font: FontTypes) => {
     font-size: ${fonts[font].size};
     font-weight: ${fonts[font].weight};
     line-height: ${fonts[font].height};
-    letter-spacing: ${fonts[font].spacing}
+    letter-spacing: ${fonts[font].spacing};
   `;
 };
 export default fonts;

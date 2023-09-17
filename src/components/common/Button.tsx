@@ -35,10 +35,14 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
 }
 
+interface ButtonStyleProps extends Omit<ButtonProps, "fill"> {
+  fill: string;
+}
+
 const Button: FC<ButtonProps> = (props) => {
-  const { disabled = false, children, width = "auto%", onClick, ...rest } = props;
+  const { disabled = false, children, width = "auto%", onClick, fill = true, ...rest } = props;
   return (
-    <ButtonStyle {...rest} width={width} disabled={disabled} onClick={onClick}>
+    <ButtonStyle {...rest} width={width} disabled={disabled} fill={fill.toString()} onClick={onClick}>
       {children}
     </ButtonStyle>
   );
@@ -46,12 +50,12 @@ const Button: FC<ButtonProps> = (props) => {
 
 export default Button;
 
-const getColor = ({ color = "primary", fill = true, disabled = false }: ButtonProps) => {
+const getColor = ({ color = "primary", fill = "true", disabled = false }: ButtonStyleProps) => {
   if (disabled) {
     return getDisabled(fill);
   }
   if (color === "primary") {
-    if (fill) {
+    if (fill === "true") {
       return `
         background-color: ${colors.BLUE[5]};
         color: ${colors.WHITE};
@@ -75,7 +79,7 @@ const getColor = ({ color = "primary", fill = true, disabled = false }: ButtonPr
       }
     `;
   }
-  if (fill) {
+  if (fill === "true") {
     return `
       background-color: ${colors.GRAY[6]};
       color: ${colors.WHITE};
@@ -99,8 +103,8 @@ const getColor = ({ color = "primary", fill = true, disabled = false }: ButtonPr
     }
   `;
 };
-const getDisabled = (fill = true) => {
-  if (fill) {
+const getDisabled = (fill: string) => {
+  if (fill === "true") {
     return `
       background-color: ${colors.GRAY[6]};
       color:${colors.WHITE};
@@ -112,7 +116,7 @@ const getDisabled = (fill = true) => {
     outline: 1px solid ${colors.GRAY[2]}
   `;
 };
-const getShape = ({ shape = "rectangle", size = "large" }: ButtonProps) => {
+const getShape = ({ shape = "rectangle", size = "large" }: ButtonStyleProps) => {
   if (size === "small") {
     if (shape === "rectangle") {
       return `
@@ -149,7 +153,7 @@ const getSize = (size: Size = "large") => {
   `;
 };
 
-const ButtonStyle = styled.button<ButtonProps>`
+const ButtonStyle = styled.button<ButtonStyleProps>`
   box-sizing: border-box;
   outline: 0;
   border: 0;

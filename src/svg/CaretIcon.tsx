@@ -1,11 +1,11 @@
-import { HTMLAttributes } from "react";
+import { FC, HTMLAttributes } from "react";
 
 interface CaretProps extends HTMLAttributes<SVGElement> {
   width?: number;
   height?: number;
 }
 
-const Right: React.FC<CaretProps> = ({ width = 24, height = 24, ...rest }) => (
+const Right: FC<CaretProps> = ({ width = 24, height = 24, ...rest }) => (
   <svg
     {...rest}
     width={`${width}`}

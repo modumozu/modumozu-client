@@ -44,7 +44,7 @@ interface ButtonStyleProps extends Omit<ButtonProps, "fill"> {
 }
 
 const Button: FC<ButtonProps> = (props) => {
-  const { disabled = false, children, width = "auto%", onClick, fill = true, ...rest } = props;
+  const { disabled = false, children, width = "auto", onClick, fill = true, ...rest } = props;
   return (
     <ButtonStyle {...rest} width={width} disabled={disabled} fill={fill.toString()} onClick={onClick}>
       {children}

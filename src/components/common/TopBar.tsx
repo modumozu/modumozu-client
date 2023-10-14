@@ -5,15 +5,22 @@ import PersonIcon from "@/svg/PersonIcon";
 import { FC } from "react";
 import { styled } from "styled-components";
 
-const TopBar: FC = () => {
+interface TopBarProps {
+  handleHeartClick: () => void;
+  handlePersonClick: () => void;
+}
+
+const TopBar: FC<TopBarProps> = (props) => {
+  const { handleHeartClick, handlePersonClick } = props;
+
   return (
     <Header>
       <Logo />
       <ButtonGroup>
-        <IconButton>
+        <IconButton onClick={handleHeartClick}>
           <HeartIcon.fill />
         </IconButton>
-        <IconButton>
+        <IconButton onClick={handlePersonClick}>
           <PersonIcon />
         </IconButton>
       </ButtonGroup>

@@ -1,101 +1,70 @@
-import colors from "@/styles/colors";
-import { getFonts } from "@/styles/fonts";
-import { FC } from "react";
+"use client";
+
+import { FC, ReactNode, useEffect } from "react";
+import Portal from "./Portal";
 import styled from "styled-components";
-import { initalModalData, ModalData } from "../mypage/MenuSection";
-import { Overlay } from "./Overlay";
 
 interface ModalProps {
   /**
-   * 모달 박스 제목
+   * 화면에 노출 시킬지 여부
    */
-  title: string;
+  visible: boolean;
+
   /**
-   * 모달 박스 내용
+   * 모달 컨텐츠
    */
-  content?: string;
+  children: ReactNode;
+
   /**
-   * 모달 버튼 내용
+   * 모달 컨텐츠 바깥을 클릭했을 때
    */
-  buttonText: [string, string] | string;
-  /**
-   * Primary 버튼 클릭 핸들러
-   */
-  handlePrimaryButtonClick: () => void;
-  /**
-   * 모달 on/off 핸들러
-   */
-  setIsModalShowing: (v: ModalData) => void;
+  onOutsideClick?: () => void;
 }
 
-const Modal: FC<ModalProps> = (props) => {
-  const { title, content, buttonText, handlePrimaryButtonClick, setIsModalShowing } = props;
+const Modal: FC<ModalProps> = ({ visible, children, onOutsideClick }) => {
+  useEffect(() => {
+    if (visible && document.body) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "visible";
+    }
+  }, [visible]);
+
+  useEffect(() => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+  }, []);
+
   return (
-    <Overlay onClick={() => setIsModalShowing(initalModalData)}>
-      <ModalBox onClick={(e) => e.stopPropagation()}>
-        <h3>{title}</h3>
-        {content ? <p>{content}</p> : null}
-        <div>
-          {typeof buttonText === "string" ? (
-            <ModalButton primary={true} onClick={handlePrimaryButtonClick}>
-              {buttonText}
-            </ModalButton>
-          ) : (
-            buttonText.map((text, idx) => (
-              <ModalButton
-                primary={idx === 1}
-                onClick={idx === 1 ? handlePrimaryButtonClick : () => setIsModalShowing(initalModalData)}
-                key={text}
-              >
-                {text}
-              </ModalButton>
-            ))
-          )}
-        </div>
-      </ModalBox>
-    </Overlay>
+    <Portal>
+      {visible && (
+        <ModalWrapper>
+          <ModalBackground onClick={onOutsideClick}>
+            <ModalContent>{children}</ModalContent>
+          </ModalBackground>
+        </ModalWrapper>
+      )}
+    </Portal>
   );
 };
 
 export default Modal;
 
-const ModalBox = styled.div`
+const ModalBackground = styled.div`
+  min-height: calc(var(--var, 1vh) * 100);
+  max-width: 375px;
+  background-color: #0000007a;
+  margin: 0 auto;
+`;
+const ModalWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+`;
+const ModalContent = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
-  translate: -50% -50%;
-  width: 295px;
-  padding: 24px 16px 16px 16px;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  background-color: white;
-
-  h3 {
-    ${getFonts("H3_SEMIBOLD")}
-  }
-
-  p {
-    ${getFonts("BODY1_REGULAR")}
-    padding-top: 11px;
-    white-space: pre-line;
-  }
-
-  div {
-    display: flex;
-    gap: 8px;
-    padding-top: 24px;
-    width: 100%;
-  }
-`;
-
-const ModalButton = styled.button<{ primary: boolean }>`
-  flex-grow: 1;
-  padding: 16px 20px 16px 20px;
-  border-radius: 6px;
-  background-color: ${(props) => (props.primary ? colors.ON.PRIMARY : colors.BLUE[1])};
-  color: ${(props) => (props.primary ? colors.WHITE : colors.ON.PRIMARY)};
-  ${getFonts("BUTTON1_SEMIBOLD")}
+  transform: translate(-50%, -50%);
 `;

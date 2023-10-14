@@ -36,7 +36,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * 버튼 폰트
    */
-  font?: FontTypes;
+  $font?: FontTypes;
 }
 
 interface ButtonStyleProps extends Omit<ButtonProps, "fill"> {
@@ -44,9 +44,17 @@ interface ButtonStyleProps extends Omit<ButtonProps, "fill"> {
 }
 
 const Button: FC<ButtonProps> = (props) => {
-  const { disabled = false, children, width = "auto%", onClick, fill = true, ...rest } = props;
+  const {
+    disabled = false,
+    children,
+    width = "auto%",
+    onClick,
+    fill = true,
+    $font = "BUTTON2_SEMIBOLD",
+    ...rest
+  } = props;
   return (
-    <ButtonStyle {...rest} width={width} disabled={disabled} fill={fill.toString()} onClick={onClick}>
+    <ButtonStyle {...rest} width={width} disabled={disabled} fill={fill.toString()} $font={$font} onClick={onClick}>
       {children}
     </ButtonStyle>
   );
@@ -56,7 +64,7 @@ export default Button;
 
 const getColor = ({ color = "primary", fill = "true", disabled = false }: ButtonStyleProps) => {
   if (disabled) {
-    return getDisabled(fill);
+    return getDisabled(fill, color);
   }
   if (color === "primary") {
     if (fill === "true") {
@@ -107,17 +115,32 @@ const getColor = ({ color = "primary", fill = "true", disabled = false }: Button
     }
   `;
 };
-const getDisabled = (fill: string) => {
+const getDisabled = (fill: string, color: Color) => {
+  if (color === "primary") {
+    if (fill === "true") {
+      return `
+      background-color: ${colors.BLUE[5]};
+      opacity: 80%;
+      color:${colors.WHITE};
+      `;
+    }
+    return `
+    background-color: ${colors.WHITE};
+    color:${colors.FONT.PRIMARY};
+    opacity: 80%;
+    outline: 1px solid ${colors.BLUE[1]};
+    `;
+  }
   if (fill === "true") {
     return `
-      background-color: ${colors.GRAY[6]};
-      color:${colors.WHITE};
+    background-color: ${colors.GRAY[6]};
+    color:${colors.WHITE};
     `;
   }
   return `
-    background-color: ${colors.WHITE};
-    color:${colors.FONT_LIGHT.PRIMARY};
-    outline: 1px solid ${colors.GRAY[2]}
+  background-color: ${colors.WHITE};
+  color:${colors.FONT_LIGHT.PRIMARY};
+  outline: 1px solid ${colors.GRAY[2]};
   `;
 };
 const getShape = ({ shape = "rectangle", size = "large" }: ButtonStyleProps) => {
@@ -165,6 +188,6 @@ const ButtonStyle = styled.button<ButtonStyleProps>`
     width: ${props.width};
     ${getColor(props)}
     ${getShape(props)} 
-    ${getFonts(props.font ?? "BUTTON2_SEMIBOLD")}
+    ${getFonts(props.$font ?? "BUTTON2_SEMIBOLD")}
   `};
 `;

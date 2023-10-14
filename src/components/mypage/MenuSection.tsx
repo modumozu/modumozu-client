@@ -3,7 +3,7 @@ import styled from "styled-components";
 import MenuList from "./MenuList";
 import colors from "@/styles/colors";
 import { useState } from "react";
-import Modal from "../common/Modal";
+import SmallModalBox from "../common/SmallModalBox";
 
 export interface ModalData {
   title: string;
@@ -43,23 +43,37 @@ const MenuSection = () => {
   return (
     <SectionWrapper>
       <MenuGroup>
-        <MenuList menuName="FAQ" handleClick={() => {}} />
+        <MenuList
+          menuName="FAQ"
+          handleClick={() => {
+            window.open("https://almond-sand-202.notion.site/FAQ-49d2dd9ff6d640df9751e14aee7a8a6f", "_blank");
+          }}
+        />
         <MenuList menuName="로그아웃" handleClick={() => setIsModalShowing(logoutModalData)} />
         <MenuList menuName="탈퇴하기" handleClick={() => setIsModalShowing(withdrawalAskModalData)} />
       </MenuGroup>
       <MenuGroup>
-        <MenuList menuName="개인정보 처리 방침" handleClick={() => {}} />
-        <MenuList menuName="서비스 이용 동의" handleClick={() => {}} />
-      </MenuGroup>
-      {isModalShowing.title.length > 0 && (
-        <Modal
-          title={isModalShowing.title}
-          content={isModalShowing.content}
-          buttonText={isModalShowing.buttonText}
-          handlePrimaryButtonClick={isModalShowing.handlePrimaryButtonClick}
-          setIsModalShowing={setIsModalShowing}
+        <MenuList
+          menuName="개인정보 처리 방침"
+          handleClick={() => {
+            window.open("https://almond-sand-202.notion.site/90bc8f665696435eac65113c22be8b2e", "_blank");
+          }}
         />
-      )}
+        <MenuList
+          menuName="서비스 이용 동의"
+          handleClick={() => {
+            window.open("https://almond-sand-202.notion.site/85b714cd3b454b25b0175c265b8af861", "_blank");
+          }}
+        />
+      </MenuGroup>
+      <SmallModalBox
+        visible={isModalShowing.title.length > 0}
+        title={isModalShowing.title}
+        content={isModalShowing.content}
+        buttonText={isModalShowing.buttonText}
+        handlePrimaryButtonClick={isModalShowing.handlePrimaryButtonClick}
+        setIsModalShowing={setIsModalShowing}
+      />
     </SectionWrapper>
   );
 };

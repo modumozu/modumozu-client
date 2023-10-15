@@ -13,8 +13,10 @@ const SignUp = () => {
 
   return (
     <BottomSheet visible={true} handleOverlayClick={() => {}}>
-      <div>안녕</div>
-      <Button width="100%">가입 완료</Button>
+      <BottomSheetWrap>
+        <div>안녕</div>
+        <Button width="100%">가입 완료</Button>
+      </BottomSheetWrap>
     </BottomSheet>
   );
 };
@@ -22,5 +24,5 @@ const SignUp = () => {
 export default SignUp;
 
 const BottomSheetWrap = styled.div`
-  padding
+  padding-bottom: 20px;
 `;

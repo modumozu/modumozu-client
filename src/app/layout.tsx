@@ -1,4 +1,5 @@
 import StyledComponentsRegistry from "@/lib/registry";
+import QueryProviders from "@/lib/Providers";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import RootLayoutStyle from "@/components/common/RootLayout";
@@ -23,9 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
       </head>
       <body>
-        <StyledComponentsRegistry>
-          <RootLayoutStyle>{children}</RootLayoutStyle>
-        </StyledComponentsRegistry>
+        <QueryProviders>
+          <StyledComponentsRegistry>
+            <RootLayoutStyle>{children}</RootLayoutStyle>
+          </StyledComponentsRegistry>
+        </QueryProviders>
       </body>
     </html>
   );

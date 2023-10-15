@@ -5,6 +5,7 @@ import styled from "styled-components";
 import colors from "@/styles/colors";
 import { getFonts } from "@/styles/fonts";
 import getRelatedBankList from "@/util/getRelatedBankList";
+import { BottomSheetButton } from "./BottomSheetGuide";
 
 interface BottomSheetTipProps {
   investmentBankName: string;
@@ -33,12 +34,12 @@ export const BottomSheetTip: FC<BottomSheetTipProps> = (props) => {
           일부 증권사는 연계된 은행을 통해 제한없이 만들 수 있어요.
         </p>
       </BottomSheetTipContent>
-      <Button color="secondary" width="100%" font="BUTTON1_SEMIBOLD">
+      <Button color="secondary" width="100%" $font="BUTTON1_SEMIBOLD">
         다른 증권사 제한해제 팁 더보기
       </Button>
-      <Button color="secondary" fill={false} width="100%" font="BUTTON1_REGULAR">
+      <BottomSheetButton color="secondary" fill={false} width="100%" $font="BUTTON1_REGULAR">
         닫기
-      </Button>
+      </BottomSheetButton>
     </>
   );
 };

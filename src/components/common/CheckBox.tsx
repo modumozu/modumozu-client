@@ -37,6 +37,8 @@ const CheckBox: FC<CheckBoxProps> = (props) => {
 export default CheckBox;
 
 const CheckBoxWrap = styled.label`
+  display: flex;
+  align-items: center;
   input {
     display: none;
   }

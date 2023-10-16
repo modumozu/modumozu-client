@@ -1,5 +1,22 @@
+"use client";
+
+import { useEffect } from "react";
+
 const OnBoarding = () => {
-  return <div>온보딩</div>;
+  useEffect(() => {}, []);
+
+  return (
+    <div>
+      온보딩
+      <button
+        onClick={() => {
+          console.log("znzlemf", document.cookie);
+        }}
+      >
+        쿠키들
+      </button>
+    </div>
+  );
 };
 
 export default OnBoarding;

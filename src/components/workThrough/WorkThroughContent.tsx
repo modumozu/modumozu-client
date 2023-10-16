@@ -1,6 +1,5 @@
 "use client";
 
-import DeleteIcon from "@/svg/DeleteIcon";
 import { FC, ReactNode } from "react";
 import styled from "styled-components";
 
@@ -22,36 +21,7 @@ const WorkThroughContent: FC<WorkThroughContentProps> = ({ header, content, blur
   );
 };
 
-const WorkThroughMainHeader = () => {
-  return (
-    <>
-      <WorkThroughHeader>
-        <SkipButton />
-      </WorkThroughHeader>
-      <div>
-        <Image src={"/images/logo_1.png"} />
-      </div>
-    </>
-  );
-};
-
-export default Object.assign(WorkThroughContent, {
-  mainHeader: WorkThroughMainHeader,
-});
-
-const WorkThroughHeader = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding: 20px;
-`;
-
-const SkipButton = styled(DeleteIcon)`
-  cursor: pointer;
-`;
-const Image = styled.img`
-  width: 30px;
-  height: 30px;
-`;
+export default Object.assign(WorkThroughContent);
 
 const WorkThroughWrap = styled.div`
   flex: 1;
@@ -60,7 +30,6 @@ const WorkThroughWrap = styled.div`
   height: 30px;
   overflow: hidden;
 `;
-
 const Content = styled.div`
   margin: 60px auto 0px auto;
   width: 70%;

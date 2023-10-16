@@ -1,14 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import colors from "@/styles/colors";
 import { getFonts } from "@/styles/fonts";
 import Button from "../common/Button";
 import WorkThroughContent from "./WorkThroughContent";
 import KakaoLoginButton from "./KakaoLoginButton";
-import instance from "@/api/common";
-import Link from "next/link";
+import WorkThroughMain from "./WorkThroughMain";
 
 const WorkThrough = () => {
   const [step, setStep] = useState(1);
@@ -16,37 +15,44 @@ const WorkThrough = () => {
   const handleNextStepClick = () => {
     setStep((step) => step + 1);
   };
-  const handleLoginClick = () => {
-    setStep(4);
-  };
 
   const renderPage = () => {
     switch (step) {
       case 1:
-        return (
-          <WorkThroughContent
-            header={"보유 계좌를 선택하면,"}
-            content={<img src="/images/step_1.png" width="100%" />}
-          />
-        );
+        return <WorkThroughMain />;
       case 2:
         return (
           <WorkThroughContent
-            header={"보유 계좌를 선택하면,"}
+            header={<Description>보유 계좌를 선택하면,</Description>}
             content={<img src="/images/step_1.png" width="100%" />}
           />
         );
       case 3:
         return (
           <WorkThroughContent
-            header={"내 계좌에 따라\n청약 가능한 공모주를\n한 눈에 알 수 있어요"}
+            header={
+              <Description>
+                내 계좌에 따라
+                <br />
+                <StrongText>청약 가능한 공모주</StrongText>를
+                <br />한 눈에 알 수 있어요
+              </Description>
+            }
             content={<img src="/images/step_2.png" width="100%" />}
           />
         );
       case 4:
         return (
           <WorkThroughContent
-            header={"계좌 개설의 제약에 대해\n필요한 그 때 바로\n안내해드려요"}
+            header={
+              <Description>
+                <StrongText>계좌 개설의 제약에 대해</StrongText>
+                <br />
+                필요한 그 때 바로
+                <br />
+                안내해드려요
+              </Description>
+            }
             content={<img src="/images/step_3.png" width="100%" />}
           />
         );
@@ -55,15 +61,8 @@ const WorkThrough = () => {
     }
   };
 
-  const handleTestClick = async () => {
-    const url = "https://api.modumozu.com/oauth2/authorization/kakao";
-
-    const res = await instance.get(url);
-    console.log("res", res);
-  };
-
   const handleKakaoClick = () => {
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_KAKAO_KEY}&redirect_uri=http://localhost:3000/kakao&response_type=code`;
+    window.location.href = "https://api.modumozu.com/oauth2/authorization/kakao";
   };
 
   return (
@@ -75,17 +74,14 @@ const WorkThrough = () => {
             <Button width="100%" onClick={handleNextStepClick}>
               {step > 1 ? "다음" : "시작"}
             </Button>
-            <Button width="100%">
-              <Link href="https://api.modumozu.com/oauth2/authorization/kakao" passHref>
-                {/* <a target="_blank" rel="noopener noreferrer"> */}
-                외부링크
-                {/* </a> */}
-              </Link>
+            <Button width="100%" onClick={handleKakaoClick}>
               로그인
             </Button>
           </>
         ) : (
-          <KakaoLoginButton onClick={handleKakaoClick} />
+          <>
+            <KakaoLoginButton onClick={handleKakaoClick} />
+          </>
         )}
       </ButtonWrap>
     </WorkThroughWrap>
@@ -110,6 +106,7 @@ const ContentWrap = styled.div`
 const ButtonWrap = styled.div`
   gap: 8px 0;
   width: calc(100%);
+  height: 100px;
   position: absolute;
   bottom: 20px;
   > * + * {
@@ -123,4 +120,6 @@ const Description = styled.div`
   padding: 20px;
   white-space: pre-wrap;
 `;
-const StrongText = styled.span``;
+const StrongText = styled.span`
+  color: ${colors.FONT.PRIMARY};
+`;

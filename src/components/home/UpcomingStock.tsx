@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { FC } from "react";
 import HeartIcon from "@/svg/HeartIcon";
 import styled from "styled-components";
@@ -8,66 +8,85 @@ import BankIcon from "@/svg/BankIcon";
 import { getFonts } from "@/styles/fonts";
 import DangerIcon from "@/svg/DangerIcon";
 import Button from "../common/Button";
+import { getBankName } from "@/util/getBankName";
+import Badge from "../common/Badge";
+import { useSetRecoilState } from "recoil";
+import { ToastAtom } from "@/recoil/toastState";
+import { modifyInterestingStock } from "@/api/interesting";
 
 interface UpcomingStockProps {
   children: ReactNode;
 }
 interface UpcomingStockStatusProps {
-  status: boolean;
-  children: string;
+  startDate: string;
+  endDate: string;
 }
-type Subscription = "disable" | "able" | "limit";
 interface UpcomingStockCardProps {
+  id: number;
   category: string;
   title: string;
   children?: ReactNode;
   price: [number, number];
-  account: string;
+  account: number[];
+  nonRemainAccounts: number[];
   love: boolean;
-  subscription?: Subscription;
-  date?: string;
+  cardType: string;
+  proposalAgent: number;
+  proposalEndDate: string;
   onClick?: () => void;
 }
 
 const UpcomingStockMain: FC<UpcomingStockProps> = ({ children }) => {
   return <article>{children}</article>;
 };
-const UpcomingStockStatus: FC<UpcomingStockStatusProps> = ({ status, children }) => {
-  // TODO 날짜 어떻게 처리할 지
-  if (status) {
+const UpcomingStockStatus: FC<UpcomingStockStatusProps> = ({ startDate, endDate }) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const current = new Date();
+  const today = new Date(current.getFullYear() + "-" + (current.getMonth() + 1) + "-" + current.getDate());
+
+  let diff = Math.abs(start.getTime() - current.getTime());
+  diff = Math.ceil(diff / (1000 * 60 * 60 * 24));
+
+  if (today < start) {
+    return (
+      <UpcomingStockStatusWrap>
+        <UpcomingStockStatusLabel color={colors.FONT_LIGHT.TERIARY}>D - {diff} </UpcomingStockStatusLabel>
+        <span>{`청약일 ${start.getMonth() + 1 + "월 " + start.getDate() + "일"}`}</span>
+      </UpcomingStockStatusWrap>
+    );
+  }
+  if (today <= end) {
     return (
       <UpcomingStockStatusWrap>
         <Dot />
         <UpcomingStockStatusLabel color={colors.FONT.ACCENT}> 진행 중 </UpcomingStockStatusLabel>
-        <span>{`마감일 ${children}`}</span>
+        <span>{`마감일 ${end.getMonth() + 1 + "월 " + end.getDate() + "일"}`}</span>
       </UpcomingStockStatusWrap>
     );
   }
-  return (
-    <UpcomingStockStatusWrap>
-      <UpcomingStockStatusLabel color={colors.FONT_LIGHT.TERIARY}>D - 5 </UpcomingStockStatusLabel>
-      <span>{`청약일 ${children}`}</span>
-    </UpcomingStockStatusWrap>
-  );
 };
 const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
-  const { category, title, price, love, account, subscription, onClick, date = "" } = props;
+  const {
+    id,
+    category,
+    title,
+    price,
+    love,
+    account,
+    nonRemainAccounts,
+    cardType,
+    onClick,
+    proposalEndDate,
+    proposalAgent,
+  } = props;
+  const endDate = new Date(proposalEndDate);
+  const [pinned, setPinned] = useState(love);
+  const setToastString = useSetRecoilState(ToastAtom);
 
   const renderSubscription = () => {
-    switch (subscription) {
-      case "able":
-        return (
-          <UpcomingStockSubscriptionWrap>
-            <span>
-              <UpcomingStockSubscriptionDateText>{date}</UpcomingStockSubscriptionDateText>
-              <UpcomingStockSubscriptionText>까지 계좌를 개설해주세요.</UpcomingStockSubscriptionText>
-            </span>
-            <Button shape="round" size="small" onClick={onClick}>
-              계좌 개설
-            </Button>
-          </UpcomingStockSubscriptionWrap>
-        );
-      case "disable":
+    switch (cardType) {
+      case "B":
         return (
           <UpcomingStockSubscriptionWrap>
             <UpcomingStockSubscriptionDisableWrap>
@@ -77,7 +96,23 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
             </UpcomingStockSubscriptionDisableWrap>
           </UpcomingStockSubscriptionWrap>
         );
-      case "limit":
+      case "C":
+        return (
+          <UpcomingStockSubscriptionWrap>
+            <span>
+              <UpcomingStockSubscriptionDateText>
+                {getBankName(proposalAgent)?.slice(0, -2) + " "}
+              </UpcomingStockSubscriptionDateText>
+              <UpcomingStockSubscriptionText>
+                {endDate.getMonth() + 1 + "월" + endDate.getDate() + "일까지 개설 필요"}
+              </UpcomingStockSubscriptionText>
+            </span>
+            <Button shape="round" size="small" onClick={onClick}>
+              계좌 개설
+            </Button>
+          </UpcomingStockSubscriptionWrap>
+        );
+      case "E":
         return (
           <UpcomingStockSubscriptionWrap>
             <UpcomingStockSubscriptionText>신규 계좌 개설이 제한되었습니다.</UpcomingStockSubscriptionText>
@@ -91,7 +126,6 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
     }
   };
 
-  // TODO 보유한 계좌의 데이터가 어떤 형식으로 오는지 에상이 안되서 아직 개발 x
   return (
     <UpcomingStockCardWarp>
       <UpcomingStockCardTop>
@@ -99,30 +133,56 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
           <UpcomingStockCardTopCategory>{category}</UpcomingStockCardTopCategory>
           <UpcomingStockCardTopTitle>{title}</UpcomingStockCardTopTitle>
         </div>
-        {love && (
-          <div>
+        {pinned && (
+          <HeartButton
+            onClick={() => {
+              modifyInterestingStock(id);
+              setPinned((prev) => !prev);
+              setToastString("관심 공모주에서 삭제되었어요.");
+            }}
+          >
             <HeartIcon.fill color={colors.ON.PRIMARY} />
-          </div>
+          </HeartButton>
         )}
       </UpcomingStockCardTop>
       <UpcomingStockCardInfos>
         <UpcomingStockCardInfoItem>
           <MoneyIcon />
-          <span>{`${price[0].toLocaleString()}원 ~ ${price[1].toLocaleString()}원`}</span>
+          <span>
+            {price[0] === 0 || price[1] === 0
+              ? "공모가 확인 중"
+              : `${price[0].toLocaleString()}원 ~ ${price[1].toLocaleString()}원`}
+          </span>
         </UpcomingStockCardInfoItem>
         <UpcomingStockCardInfoItem>
           <BankIcon />
           <UpcomingStockCardInfoAccountList>
             <UpcomingStockCardInfoAccountListItem>
-              <span>{account}</span>
+              {account.length > 0 && (
+                <>
+                  <span>
+                    {account.slice(0, 2).map((id) => getBankName(id)) +
+                      (account.length > 2 ? ` 외 ${account.length - 2}개` : "")}
+                  </span>
+                  <Badge type="primary">보유</Badge>
+                </>
+              )}
             </UpcomingStockCardInfoAccountListItem>
             <UpcomingStockCardInfoAccountListItem>
-              <span>{account}</span>
+              {nonRemainAccounts.length > 0 && (
+                <>
+                  <span>
+                    {nonRemainAccounts.slice(0, 2).map((id) => getBankName(id)) +
+                      (nonRemainAccounts.length > 2 ? ` 외 ${nonRemainAccounts.length - 2}개` : "")}
+                  </span>
+                  <Badge type="secondary">미보유</Badge>
+                </>
+              )}
             </UpcomingStockCardInfoAccountListItem>
           </UpcomingStockCardInfoAccountList>
         </UpcomingStockCardInfoItem>
       </UpcomingStockCardInfos>
-      {!!subscription && renderSubscription()}
+      {renderSubscription()}
     </UpcomingStockCardWarp>
   );
 };
@@ -173,10 +233,15 @@ const UpcomingStockCardInfoItem = styled.li`
 `;
 const UpcomingStockCardInfoAccountList = styled.ul``;
 const UpcomingStockCardInfoAccountListItem = styled.li`
+  display: flex;
+  align-items: center;
   & + & {
     margin-top: 3px;
   }
   ${getFonts("H6_REGULAR")}
+  span {
+    margin-right: 4px;
+  }
 `;
 const UpcomingStockCardWarp = styled.div`
   margin-top: 12px;
@@ -210,6 +275,9 @@ const UpcomingStockSubscriptionDisableText = styled.span`
 const UpcomingStockSubscriptionDateText = styled.span`
   ${getFonts("H6_SEMIBOLD")}
   color: ${colors.FONT_LIGHT.PRIMARY};
+`;
+const HeartButton = styled.div`
+  cursor: pointer;
 `;
 export default Object.assign(UpcomingStockMain, {
   status: UpcomingStockStatus,

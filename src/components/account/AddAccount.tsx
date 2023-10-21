@@ -5,8 +5,9 @@ import { getFonts } from "@/styles/fonts";
 import PlusIcon from "@/svg/PlusIcon";
 import Button from "../common/Button";
 import AddAccountBoxList from "./AddAccountBoxList";
-import { addMyAccounts } from "@/service/apiService";
 import FullScreenModal from "../common/FullScreenModal";
+import { AgentRegisterType } from "@/types";
+import { addMyAccounts } from "@/api/account";
 
 interface AddAccountProps {
   /**
@@ -17,11 +18,6 @@ interface AddAccountProps {
    * 모달 창 끄기
    */
   setInvisible: () => void;
-}
-
-export interface AgentRegisterType {
-  agentId: number;
-  registeredAt: string;
 }
 
 const emptyAgent: AgentRegisterType = {
@@ -35,7 +31,7 @@ const AddAccount: FC<AddAccountProps> = (props) => {
 
   return (
     <FullScreenModal visible={visible} setInvisible={setInvisible}>
-      <Description>
+      <FullScreenModalDescription>
         <h2>
           새로 개설한 증권 계좌를 <br />
           추가해주세요.
@@ -47,7 +43,7 @@ const AddAccount: FC<AddAccountProps> = (props) => {
             계좌 개설을 제한하고 있어요.
           </li>
         </ul>
-      </Description>
+      </FullScreenModalDescription>
       <section>
         <AddAccountButton
           onClick={() =>
@@ -69,6 +65,7 @@ const AddAccount: FC<AddAccountProps> = (props) => {
             addMyAccounts(accounts.filter((item) => item.agentId > 0 && item.registeredAt.length > 0));
             window.location.reload();
           }}
+          $font="BUTTON1_SEMIBOLD"
         >
           추가 완료
         </Button>
@@ -79,7 +76,7 @@ const AddAccount: FC<AddAccountProps> = (props) => {
 
 export default AddAccount;
 
-const Description = styled.section`
+export const FullScreenModalDescription = styled.section`
   box-sizing: border-box;
   width: 310px;
   margin-bottom: 40px;
@@ -96,6 +93,15 @@ const Description = styled.section`
     list-style: disc;
     text-decoration: dotted;
     margin-left: 20px;
+  }
+
+  p {
+    ${getFonts("BODY1_REGULAR")}
+    color: ${colors.FONT_LIGHT.TERIARY};
+  }
+
+  span {
+    color: ${colors.FONT.PRIMARY};
   }
 `;
 

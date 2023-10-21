@@ -5,6 +5,7 @@ import { getFonts } from "@/styles/fonts";
 import TapMenu from "../common/TapMenu";
 import { useState } from "react";
 import UpcomingStock from "./UpcomingStock";
+import { useRouter } from "next/navigation";
 
 type Subscription = "disable" | "able" | "limit";
 
@@ -75,6 +76,8 @@ const UpcomingStockSection = () => {
   const filteredUpcomingStockData = allUpcomingStockData.filter((data) => data.subscription !== "disable");
   const upcomingStockData = isShowingAllStocks ? allUpcomingStockData : filteredUpcomingStockData;
 
+  const router = useRouter();
+
   const handleChangeTapMenu = (value: boolean) => {
     setIsShowingAllStocks(value);
   };
@@ -96,7 +99,7 @@ const UpcomingStockSection = () => {
       />
       <UpcomingStockList>
         {upcomingStockData.map((data) => (
-          <UpcomingStockItem key={data.id}>
+          <UpcomingStockItem onClick={() => router.push("/detail/11018")} key={data.id}>
             <UpcomingStock.status status={true}>{data.subscriptionDueDate}</UpcomingStock.status>
             <UpcomingStock.cardWrap
               title={data.title}

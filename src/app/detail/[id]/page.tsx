@@ -1,5 +1,6 @@
 "use client";
 
+import { getDetailById } from "@/api/ipo";
 import Modal from "@/components/common/Modal";
 import DetailCard from "@/components/detail/DetailCard";
 import DetailHeader from "@/components/detail/DetailHeader";
@@ -9,6 +10,7 @@ import IPOInfo from "@/components/detail/IPOInfo";
 import IPOTapMenu from "@/components/detail/IPOTapMenu";
 import InvestCompetition from "@/components/detail/InvestCompetition";
 import POInfo from "@/components/detail/POInfo";
+import { useEffect } from "react";
 
 const ipoConfirmDummy: IPOComfirmTableData = [
   {

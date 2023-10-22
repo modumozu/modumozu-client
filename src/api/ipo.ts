@@ -46,7 +46,7 @@ export const fetchUpcomingStocks = async (): Promise<UpcomingStockType> => {
 /**
  * 종료된 공모주 조회
  */
-export const fetchEndedStocks = async (): Promise<EndedStockType[]> => {
-  const { data } = await api.get(url + "/closed-ipo");
+export const fetchEndedStocks = async (page: number): Promise<EndedStockType[]> => {
+  const { data } = await api.get(`${url}/closed-ipo?page=${page}&size=10`);
   return data.data.ipos;
 };

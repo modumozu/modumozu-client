@@ -1,6 +1,6 @@
 import colors from "@/styles/colors";
 import { getFonts } from "@/styles/fonts";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import styled from "styled-components";
 import { initalModalData, ModalData } from "../mypage/MenuSection";
 import Modal from "./Modal";
@@ -17,7 +17,7 @@ interface SmallModalBoxProps {
   /**
    * 모달 박스 내용
    */
-  content?: string;
+  content?: ReactNode;
   /**
    * 모달 버튼 내용
    */

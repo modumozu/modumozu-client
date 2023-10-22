@@ -8,7 +8,7 @@ import { FC } from "react";
 export interface IPOConfirmProps {
   data: { label: string; value: string }[];
 }
-export type IPOComfirmTableData = { label: string; value: string }[];
+export type IPOTableData = { label: string; value: string }[];
 
 const IPOConfirm: FC<IPOConfirmProps> = ({ data = [] }) => {
   const renderTableData = () => {

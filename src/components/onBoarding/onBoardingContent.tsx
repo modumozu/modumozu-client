@@ -1,18 +1,16 @@
 import { FC, ReactNode } from "react";
 
 interface OnboardingContentProps {
-  title: string;
-  description: string;
+  title: ReactNode;
   content: ReactNode;
 }
 
-const OnboardingContent: FC<OnboardingContentProps> = ({ title, description, content }) => {
+const OnboardingContent: FC<OnboardingContentProps> = ({ title, content }) => {
   return (
-    <div>
-      <div>{title}</div>
-      <div>{description}</div>
-      <div>{content}</div>
-    </div>
+    <>
+      {title}
+      {content}
+    </>
   );
 };
 

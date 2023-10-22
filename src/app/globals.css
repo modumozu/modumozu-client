@@ -96,6 +96,14 @@ video {
   box-sizing: border-box;
 }
 
+div {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+div::-webkit-scrollbar {
+  display: none;
+}
+
 article,
 aside,
 details,

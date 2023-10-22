@@ -2,24 +2,22 @@ import colors from "@/styles/colors";
 import { FC } from "react";
 import styled from "styled-components";
 import { getFonts } from "@/styles/fonts";
-import { News } from "./PONewsList";
+import { News } from "@/dto/news";
 
-interface PONewsProps extends Omit<News, "link"> {
-  onClick: () => void;
-}
-
-const PONews: FC<PONewsProps> = ({ onClick, site, image, title, date }) => {
+const PONews: FC<News> = ({ press, publishedAt, source, title, redirectUrl }) => {
   return (
-    <PONewsItem onClick={onClick}>
+    <PONewsItem>
       <PONewsItemTextWrap>
-        <PONewsItemTitle>{title}</PONewsItemTitle>
+        <a href={redirectUrl} target="_blank">
+          <PONewsItemTitle>{title}</PONewsItemTitle>
+        </a>
         <PONewsItemDescription>
-          {date} &#183; {site}
+          {publishedAt} &#183; {press}
         </PONewsItemDescription>
       </PONewsItemTextWrap>
-      {image && (
+      {source !== "" && (
         <PONewsItemImageWrap>
-          <image>{image}</image>
+          <image>{source}</image>
         </PONewsItemImageWrap>
       )}
     </PONewsItem>

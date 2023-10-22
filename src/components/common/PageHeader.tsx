@@ -1,8 +1,6 @@
 "use client";
 
 import BackIcon from "@/svg/BackIcon";
-import HeartIcon from "@/svg/HeartIcon";
-import ShareIcon from "@/svg/ShareIcon";
 import { useRouter } from "next/navigation";
 import { FC, ReactNode } from "react";
 import styled from "styled-components";
@@ -27,12 +25,7 @@ const PageHeader: FC<PageHeaderProps> = ({ showPrevButton = true, addtionalButto
         </div>
       )}
 
-      {addtionalButton && (
-        <div>
-          <LikeButton />
-          <ShareButton />
-        </div>
-      )}
+      {addtionalButton && <div>{addtionalButton}</div>}
     </Header>
   );
 };
@@ -45,14 +38,5 @@ const Header = styled.header`
 `;
 
 const BackButton = styled(BackIcon)`
-  cursor: pointer;
-`;
-
-const LikeButton = styled(HeartIcon.border)`
-  cursor: pointer;
-  margin-right: 12px;
-`;
-
-const ShareButton = styled(ShareIcon)`
   cursor: pointer;
 `;

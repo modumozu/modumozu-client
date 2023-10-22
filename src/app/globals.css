@@ -96,6 +96,10 @@ video {
   box-sizing: border-box;
 }
 
+a {
+  text-decoration: none;
+}
+
 article,
 aside,
 details,

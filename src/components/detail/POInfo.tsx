@@ -3,28 +3,35 @@
 import colors from "@/styles/colors";
 import { getFonts } from "@/styles/fonts";
 import GuideIcon from "@/svg/GuideIcon";
+import { FC } from "react";
 import styled from "styled-components";
 
-const POInfo = () => {
-  /*
-   * /TODO 변수 명을 어떻게 해야할 지
-   */
+interface POInfoProps {
+  fixedOfferPrice: number;
+  publicOfferingTotalPrice: number;
+  publicOfferingAmount: number;
+  subscriptionDepositRate: number;
+}
+
+const POInfo: FC<POInfoProps> = ({
+  fixedOfferPrice,
+  publicOfferingTotalPrice,
+  publicOfferingAmount,
+  subscriptionDepositRate,
+}) => {
   return (
     <POInfoWrap>
       <POInfoTitle>공모 정보</POInfoTitle>
       <POInfoList>
         <POInfoRow>
           <POIntoLabel>공모가</POIntoLabel>
-          <POInfoValue>20,000원</POInfoValue>
-        </POInfoRow>
-        <POInfoRow>
-          <POIntoLabel>시가총액</POIntoLabel>
-          <POInfoValue>1,168억</POInfoValue>
+          <POInfoValue>{fixedOfferPrice.toLocaleString()}원</POInfoValue>
         </POInfoRow>
         <POInfoRow>
           <POIntoLabel>공모 금액</POIntoLabel>
           <POInfoValue>
-            177억원 <POInfoHeldStock>2,200,200주</POInfoHeldStock>
+            {publicOfferingTotalPrice.toLocaleString()}원{" "}
+            <POInfoHeldStock>{publicOfferingAmount.toLocaleString()}주</POInfoHeldStock>
           </POInfoValue>
         </POInfoRow>
         <POInfoRow>
@@ -32,14 +39,7 @@ const POInfo = () => {
             청약증거금율
             <GuideIcon />
           </POIntoLabel>
-          <POInfoValue>50%</POInfoValue>
-        </POInfoRow>
-        <POInfoRow>
-          <POIntoLabel>
-            균등배정비율
-            <GuideIcon />
-          </POIntoLabel>
-          <POInfoValue>50%</POInfoValue>
+          <POInfoValue>{subscriptionDepositRate}%</POInfoValue>
         </POInfoRow>
       </POInfoList>
     </POInfoWrap>

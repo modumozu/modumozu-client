@@ -1,6 +1,7 @@
 "use client";
 
-import Modal from "@/components/common/Modal";
+import { getDetailById, getDetailNewsById } from "@/api/ipo";
+import DetailBottomButton from "@/components/detail/DetailBottomButton";
 import DetailCard from "@/components/detail/DetailCard";
 import DetailHeader from "@/components/detail/DetailHeader";
 import DetailTitle from "@/components/detail/DetailTitle";
@@ -9,52 +10,93 @@ import IPOInfo from "@/components/detail/IPOInfo";
 import IPOTapMenu from "@/components/detail/IPOTapMenu";
 import InvestCompetition from "@/components/detail/InvestCompetition";
 import POInfo from "@/components/detail/POInfo";
+import queryKeys from "@/constants/queryKeys";
+import { useQuery } from "@tanstack/react-query";
+import { NextPage } from "next";
 
-const ipoConfirmDummy: IPOComfirmTableData = [
-  {
-    label: "15일",
-    value: "22,886,000",
-  },
-  {
-    label: "1개월",
-    value: "22,886,000",
-  },
-  {
-    label: "3개월",
-    value: "22,886,000",
-  },
-  {
-    label: "6개월",
-    value: "22,886,000",
-  },
-  { label: "미확약", value: "2,808,389,000" },
-  { label: "합계", value: "3,033,263,000" },
-  { label: "총 수량 대비 비율 (%)", value: "11%" },
-];
+interface DetailProps {
+  params: { id: string };
+}
 
-const Detail = () => {
+const Detail: NextPage<DetailProps> = ({ params }) => {
+  const id = params.id;
+
+  const { data, isLoading } = useQuery(queryKeys.DETAIL, () => {
+    return getDetailById(id);
+  });
+  const { data: news = [], isLoading: isNewsLoading } = useQuery(queryKeys.NEWS, () => {
+    return getDetailNewsById(id);
+  });
+  const buildMandatoryHoldingCommitmentRate = (): IPOComfirmTableData => {
+    if (data) {
+      return [
+        { label: "15일", value: data.subscriptionAmountByPeriod15Days },
+        { label: "1개월", value: data.subscriptionAmountByPeriod30Days },
+        { label: "3개월", value: data.subscriptionAmountByPeriod90Days },
+        { label: "6개월", value: data.subscriptionAmountByPeriod180Days },
+        { label: "미확약", value: data.subscriptionAmountByPeriodByNone },
+        { label: "합계", value: data.subscriptionAmountByTotal },
+        { label: "총 수량 대비 비율 (%)", value: `${data.mandatoryHoldingCommitmentRate}%` },
+      ];
+    }
+    return [];
+  };
+
+  if (data === undefined || isLoading) {
+    return null;
+  }
   return (
-    <div>
-      <DetailHeader />
-      <DetailTitle date="18" name="큐리옥스바이오시스템즈" category="내구 소비재 및 의류" />
+    <>
+      <DetailHeader id={data.id} pinned={data.pinned} />
+      <DetailTitle
+        name={data.name}
+        category={data.category}
+        status={data.status}
+        offerBeginAt={data.offerBeginAt}
+        offerEndAt={data.offerEndAt}
+        listingAt={data.listingAt}
+      />
       <DetailCard.wrapper>
         <DetailCard.item>
-          <IPOInfo />
+          <IPOInfo
+            nonRemainAgents={data.nonRemainAgents}
+            remainAgents={data.remainAgents}
+            publicOfferingTotalPrice={data.publicOfferingTotalPrice}
+            subscriptionDepositRate={data.subscriptionDepositRate}
+            investorCompetitionRate={data.investorCompetitionRate}
+            mandatoryHoldingCommitmentRate={data.mandatoryHoldingCommitmentRate}
+          />
         </DetailCard.item>
         <DetailCard.item>
-          <IPOTapMenu />
+          <IPOTapMenu
+            news={news}
+            demandForecastBeginAt={data.demandForecastBeginAt}
+            refundAt={data.refundAt}
+            listingAt={data.listingAt}
+            offerBeginAt={data.offerBeginAt}
+            offerEndAt={data.offerEndAt}
+          />
         </DetailCard.item>
         <DetailCard.item>
-          <POInfo />
+          <POInfo
+            fixedOfferPrice={data.fixedOfferPrice || data.minDesiredOfferPrice}
+            publicOfferingTotalPrice={data.publicOfferingTotalPrice}
+            publicOfferingAmount={data.publicOfferingAmount}
+            subscriptionDepositRate={data.subscriptionDepositRate}
+          />
         </DetailCard.item>
         <DetailCard.item>
-          <InvestCompetition />
+          <InvestCompetition investorCompetitionRate={data.investorCompetitionRate} />
         </DetailCard.item>
         <DetailCard.item>
-          <IPOConfirm data={ipoConfirmDummy} />
+          <IPOConfirm
+            mandatoryHoldingCommitmentRate={data.mandatoryHoldingCommitmentRate}
+            data={buildMandatoryHoldingCommitmentRate()}
+          />
+          <DetailBottomButton proposal={data.proposal} offerBeginAt={data.offerBeginAt} offerEndAt={data.offerEndAt} />
         </DetailCard.item>
       </DetailCard.wrapper>
-    </div>
+    </>
   );
 };
 

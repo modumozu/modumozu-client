@@ -8,39 +8,23 @@ interface EndStockProps {
   stockName: string;
   logoPath: string;
   openDate: Date;
-  profit: number;
 }
 
 const EndedStock: FC<EndStockProps> = (props) => {
-  const { stockName, logoPath, openDate, profit } = props;
-  const curDate = new Date();
+  const { stockName, logoPath, openDate } = props;
+  const today = new Date();
+  const curDate = new Date(today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate());
   const isPublic = curDate > openDate;
-
-  const getDescFontColor = () => {
-    if (!isPublic) {
-      return colors.FONT_LIGHT.SECONDARY;
-    } else if (profit >= 0) {
-      return colors.FONT.ACCENT;
-    } else {
-      return colors.FONT.PRIMARY;
-    }
-  };
-
-  const getDescText = () => {
-    if (!isPublic) {
-      return `${openDate.getMonth() + 1}월${openDate.getDate()}일 상장 예정`;
-    } else if (profit >= 0) {
-      return `공모가 대비 +${profit}%`;
-    } else {
-      return `공모가 대비 ${profit}%`;
-    }
-  };
 
   return (
     <Container>
-      <EndedStockLogo isPublic={isPublic} />
+      <EndedStockLogo isPublic={isPublic} path={logoPath} />
       <Title>{stockName}</Title>
-      <Description fontColor={getDescFontColor()}>{getDescText()}</Description>
+      <Description color={colors.FONT_LIGHT.SECONDARY}>
+        {openDate.getFullYear() === 2000
+          ? "상장 예정"
+          : `${openDate.getMonth() + 1}월 ${openDate.getDate()}일 상장 ${isPublic ? "완료" : "예정"}`}
+      </Description>
     </Container>
   );
 };
@@ -61,8 +45,8 @@ const Title = styled.h4`
   text-overflow: ellipsis;
 `;
 
-const Description = styled.p<{ fontColor: string }>`
+const Description = styled.p<{ color: string }>`
   ${getFonts("CAPTION1_REGULAR")};
   margin: 0;
-  color: ${(props) => props.fontColor};
+  color: ${(props) => props.color};
 `;

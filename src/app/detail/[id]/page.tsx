@@ -1,5 +1,6 @@
 "use client";
 
+import Modal from "@/components/common/Modal";
 import DetailCard from "@/components/detail/DetailCard";
 import DetailHeader from "@/components/detail/DetailHeader";
 import DetailTitle from "@/components/detail/DetailTitle";

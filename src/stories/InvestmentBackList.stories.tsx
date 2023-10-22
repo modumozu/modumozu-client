@@ -7,16 +7,9 @@ const meta = {
     return (
       <InvestmentBankList
         stockName="시지트로닉스칠팔구"
-        investmentBanks={[
-          "NH투자증권",
-          "한화투자증권",
-          "현대차증권",
-          "유안타증권",
-          "KB증권",
-          "SK증권",
-          "NH투자증권",
-          "IBK투자증권",
-        ]}
+        investmentBanks={[9, 11, 18, 3, 1, 10, 9, 14]}
+        handleClose={() => {}}
+        handleClick={() => {}}
       />
     );
   },

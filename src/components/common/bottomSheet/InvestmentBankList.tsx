@@ -1,11 +1,7 @@
-import { FC } from "react";
-import Button from "../Button";
-import styled from "styled-components";
-import { getFonts } from "@/styles/fonts";
-import colors from "@/styles/colors";
-import Image from "next/image";
-import getInvestmentBankLogo from "@/util/getInvestmentBankLogo";
+import { Dispatch, FC, SetStateAction } from "react";
 import { BottomSheetTitle } from "./BottomSheetTitle";
+import InvestmentBankCardList from "../InvestmentBankCardList";
+import { BottomSheetButton } from "./BottomSheetGuide";
 
 interface InvestmentBankListProps {
   /**
@@ -15,11 +11,19 @@ interface InvestmentBankListProps {
   /**
    * 주간사 리스트
    */
-  investmentBanks: string[];
+  investmentBanks: number[];
+  /**
+   * 닫기 버튼 핸들러
+   */
+  handleClose: () => void;
+  /**
+   * 증권사 버튼 클릭 핸들러
+   */
+  handleClick: Dispatch<SetStateAction<number>>;
 }
 
 const InvestmentBankList: FC<InvestmentBankListProps> = (props) => {
-  const { stockName, investmentBanks } = props;
+  const { stockName, investmentBanks, handleClose, handleClick } = props;
   const shortStockName = stockName.length > 8 ? stockName.slice(0, 8) + "..." : stockName;
 
   return (
@@ -30,39 +34,12 @@ const InvestmentBankList: FC<InvestmentBankListProps> = (props) => {
         </h2>
         <p>{investmentBanks.length}개</p>
       </BottomSheetTitle>
-      <InvestmentBankCardList>
-        {investmentBanks.map((name) => (
-          <InvestmentBankCard key={name}>
-            <Image src={getInvestmentBankLogo(name)} width="60" height="60" alt={name} />
-            {name}
-          </InvestmentBankCard>
-        ))}
-      </InvestmentBankCardList>
-      <Button color="secondary" fill={false} width="100%" font="BUTTON1_REGULAR">
+      <InvestmentBankCardList investmentBanks={investmentBanks} handleClick={handleClick} />
+      <BottomSheetButton color="secondary" fill={false} width="100%" $font="BUTTON1_REGULAR" onClick={handleClose}>
         닫기
-      </Button>
+      </BottomSheetButton>
     </>
   );
 };
-
-const InvestmentBankCardList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 24px;
-`;
-
-const InvestmentBankCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  border: 1px solid ${colors.GRAY_TRANSPARENT_SCALE[2]};
-  border-radius: 16px;
-  ${getFonts("CAPTION1_REGULAR")}
-  color:${colors.FONT_LIGHT.SECONDARY}
-`;
 
 export default InvestmentBankList;

@@ -1,18 +1,22 @@
 "use cliect";
 
+import { getMemberInfo } from "@/api/member";
 import colors from "@/styles/colors";
 import { getFonts } from "@/styles/fonts";
 import KakaoIcon from "@/svg/KakaoIcon";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import styled from "styled-components";
 
 const ProfileSection = () => {
+  const { data } = useQuery({ queryKey: ["getMemberInfo"], queryFn: getMemberInfo });
+
   return (
     <ProfileWrapper>
-      <h2>님 안녕하세요!</h2>
+      <h2>{data?.name}님 안녕하세요!</h2>
       <KakaoInfo>
         <KakaoIcon />
-        <p>카카오톡 로그인</p>
+        <p>카카오톡 로그인 {data?.email}</p>
       </KakaoInfo>
     </ProfileWrapper>
   );

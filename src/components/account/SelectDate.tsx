@@ -8,6 +8,10 @@ import colors from "@/styles/colors";
 import { useState } from "react";
 import { AgentRegisterType, myAccountType } from "@/types";
 import { modifyMyAccount } from "@/api/account";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import queryKeys from "@/constants/queryKeys";
+import { ToastAtom } from "@/recoil/toastState";
+import { useSetRecoilState } from "recoil";
 
 interface SelectDateProps {
   /**
@@ -26,12 +30,19 @@ interface SelectDateProps {
 
 const SelectDate = (props: SelectDateProps) => {
   const { selectedAccount, visible, setInvisible } = props;
+  const setToastString = useSetRecoilState(ToastAtom);
   const [accounts, setAccounts] = useState<AgentRegisterType[]>([
     {
       agentId: selectedAccount.agentId,
       registeredAt: selectedAccount.registeredAt,
     },
   ]);
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation((params: myAccountType) => modifyMyAccount(params), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(queryKeys.MY_ACCOUNTS);
+    },
+  });
 
   return (
     <BottomSheet visible={visible} handleOverlayClick={setInvisible}>
@@ -56,12 +67,13 @@ const SelectDate = (props: SelectDateProps) => {
             $font="BUTTON1_SEMIBOLD"
             disabled={selectedAccount.registeredAt === accounts[0].registeredAt}
             onClick={() => {
-              modifyMyAccount({
+              mutate({
                 id: selectedAccount.id,
                 agentId: accounts[0].agentId,
                 registeredAt: accounts[0].registeredAt,
               });
-              window.location.reload();
+              setInvisible();
+              setToastString("계좌가 수정되었어요.");
             }}
           >
             선택완료

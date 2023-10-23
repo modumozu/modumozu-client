@@ -1,6 +1,7 @@
 "use cliect";
 
 import { getMemberInfo } from "@/api/member";
+import queryKeys from "@/constants/queryKeys";
 import colors from "@/styles/colors";
 import { getFonts } from "@/styles/fonts";
 import KakaoIcon from "@/svg/KakaoIcon";
@@ -9,7 +10,7 @@ import React from "react";
 import styled from "styled-components";
 
 const ProfileSection = () => {
-  const { data } = useQuery({ queryKey: ["getMemberInfo"], queryFn: getMemberInfo });
+  const { data } = useQuery({ queryKey: queryKeys.MEMBER, queryFn: getMemberInfo });
 
   return (
     <ProfileWrapper>

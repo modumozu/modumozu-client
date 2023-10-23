@@ -6,11 +6,12 @@ import EndedStock from "./EndedStock";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEndedStocks } from "@/api/ipo";
 import { EndedStockType } from "@/types";
+import queryKeys from "@/constants/queryKeys";
 
 const EndedStockSection: FC = () => {
   const [page, setPage] = useState(0);
   const [stocks, setStocks] = useState<EndedStockType[]>([]);
-  const { isLoading, data } = useQuery({ queryKey: ["fetchEndedStocks", page], queryFn: () => fetchEndedStocks(page) });
+  const { isLoading, data } = useQuery({ queryKey: [...queryKeys.ENDED, page], queryFn: () => fetchEndedStocks(page) });
 
   useEffect(() => {
     if (!isLoading && data) {

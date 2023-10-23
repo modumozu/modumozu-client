@@ -6,6 +6,7 @@ import colors from "@/styles/colors";
 import { getFonts } from "@/styles/fonts";
 import { useState } from "react";
 import AddAccount from "./AddAccount";
+import Toast from "../common/Toast";
 
 export const NoAccount = () => {
   const [isShowingBottomSheet, setIsShowingBottomSheet] = useState(false);
@@ -21,6 +22,7 @@ export const NoAccount = () => {
         보유 계좌 추가
       </Button>
       <AddAccount visible={isShowingBottomSheet} setInvisible={() => setIsShowingBottomSheet(false)} />
+      <Toast />
     </NoAccountWrapper>
   );
 };

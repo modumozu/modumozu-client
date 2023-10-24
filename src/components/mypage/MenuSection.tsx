@@ -4,6 +4,10 @@ import MenuList from "./MenuList";
 import colors from "@/styles/colors";
 import { useState } from "react";
 import SmallModalBox from "../common/SmallModalBox";
+import { useMutation } from "@tanstack/react-query";
+import { deleteMember } from "@/api/member";
+import { useRouter } from "next/navigation";
+import { removeAllTokens } from "@/util/storage";
 
 export interface ModalData {
   title: string;
@@ -20,24 +24,38 @@ export const initalModalData = {
 
 const MenuSection = () => {
   const [isModalShowing, setIsModalShowing] = useState<ModalData>(initalModalData);
+  const { mutate: withdrawal } = useMutation(deleteMember);
+  const router = useRouter();
 
   const logoutModalData: ModalData = {
     title: "로그아웃하시겠습니까?",
     buttonText: ["취소", "확인"],
-    handlePrimaryButtonClick: () => setIsModalShowing(initalModalData),
+    handlePrimaryButtonClick: () => {
+      // TODO: 로그인 방식 변경되면 수정
+      removeAllTokens();
+      setIsModalShowing(initalModalData);
+      router.push("/");
+    },
   };
 
   const withdrawalDoneModalData: ModalData = {
     title: "모두모주 탈퇴가 완료되었습니다.",
     buttonText: "다음에 또 올게요.",
-    handlePrimaryButtonClick: () => setIsModalShowing(initalModalData),
+    handlePrimaryButtonClick: () => {
+      setIsModalShowing(initalModalData);
+      router.push("/");
+    },
   };
 
   const withdrawalAskModalData: ModalData = {
     title: "탈퇴하시겠습니까?",
     content: "탈퇴 시 모든 정보는\n삭제되며 복구는 불가능합니다.\n정말 탈퇴하시겠습니까?",
     buttonText: ["더써볼래요", "탈퇴할게요"],
-    handlePrimaryButtonClick: () => setIsModalShowing(withdrawalDoneModalData),
+    handlePrimaryButtonClick: () => {
+      withdrawal();
+      removeAllTokens();
+      setIsModalShowing(withdrawalDoneModalData);
+    },
   };
 
   return (

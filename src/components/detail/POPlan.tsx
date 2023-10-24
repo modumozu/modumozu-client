@@ -6,17 +6,9 @@ import CheckIcon from "@/svg/CheckIcon";
 import IngIcon from "@/svg/IngIcon";
 import styled from "styled-components";
 import dayjs, { Dayjs } from "dayjs";
-import { Fragment } from "react";
+import { FC, Fragment } from "react";
 import NumberMarkIcon from "@/svg/NumberMarkIcon";
 
-const processes: POPlanProcessList = [
-  { label: "수요 예측일", date: "2023-09-20" },
-  { label: "청약일", date: ["2023-09-23", "2023-10-03"] },
-  { label: "환불일", date: "2023-10-04" },
-  { label: "상장일", date: "2023-10-15" },
-];
-
-export type POPlanProcessList = POPlanProcessObject[];
 type POPlanProcessDate = string | [string, string] | null;
 type MarkStatus = "pass" | "ing" | "yet";
 interface POPlanProcessObject {
@@ -24,12 +16,15 @@ interface POPlanProcessObject {
   date: POPlanProcessDate;
 }
 
-const POPlan = () => {
+interface POPlanProps {
+  plan: POPlanProcessObject[];
+}
+const POPlan: FC<POPlanProps> = ({ plan }) => {
   const checkNextDate = (index: number) => {
-    if (index + 1 < processes.length) {
+    if (index + 1 < plan.length) {
       let pass = false;
-      for (let i = index; i < processes.length; i++) {
-        const nextDate = processes[index + 1].date;
+      for (let i = index; i < plan.length; i++) {
+        const nextDate = plan[index + 1].date;
         if (nextDate !== null) {
           const today = dayjs();
           if (typeof nextDate === "string" && today.isAfter(dayjs(nextDate))) {
@@ -118,7 +113,7 @@ const POPlan = () => {
     );
   };
   const renderProcess = () => {
-    return processes.map((process, index) => {
+    return plan.map((process, index) => {
       const { date, label } = process;
       const status = getMarkStatus(date, index);
       if (index === 0) {

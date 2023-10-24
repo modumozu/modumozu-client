@@ -4,10 +4,11 @@ import { fetchInterestingStocks } from "@/api/interesting";
 import StockList from "@/components/common/StockList";
 import TapMenu from "@/components/common/TapMenu";
 import Toast from "@/components/common/Toast";
+import queryKeys from "@/constants/queryKeys";
 import { getFonts } from "@/styles/fonts";
 import HeartIcon from "@/svg/HeartIcon";
 import { StockCountInfoType, StockInfoType } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -23,9 +24,11 @@ const emptyCountInfo = {
 const MyPage: FC = () => {
   const [menuState, setMenuState] = useState<status>("TOTAL");
   const { isLoading, data } = useQuery({
-    queryKey: ["fetchInterestingStocks"],
+    queryKey: queryKeys.INTERESTING,
     queryFn: fetchInterestingStocks,
   });
+  const queryClient = useQueryClient();
+
   const [interestingStockCount, setInterestingStockCount] = useState<StockCountInfoType>(emptyCountInfo);
   const [interestingStockList, setInterestingStockList] = useState<StockInfoType[]>([]);
   const visibleStocks =
@@ -35,6 +38,10 @@ const MyPage: FC = () => {
     setInterestingStockList(data?.ipos ?? []);
     setInterestingStockCount(data?.count ?? emptyCountInfo);
   }, [data]);
+
+  useEffect(() => {
+    queryClient.invalidateQueries(queryKeys.INTERESTING);
+  }, [menuState, queryClient]);
 
   return (
     <>

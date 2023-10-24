@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import OnboardingContent from "./onBoardingContent";
+import OnboardingContent from "./OnBoardingContent";
 import AccountList from "./AccountList";
 import SelectedAccount from "./SelectedAccount";
 import ProgressBar from "../common/ProgressBar";
@@ -11,20 +11,21 @@ import { getFonts } from "@/styles/fonts";
 import colors from "@/styles/colors";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
-import OnboardingRegisterBottomModal from "./RegisterBottomModal";
-import Modal from "../common/Modal";
 import SmallModalBox from "../common/SmallModalBox";
-import { ModalData } from "../mypage/MenuSection";
+import SelectDate from "./SelectDate";
 
 const OnBoarding = () => {
+  const router = useRouter();
   const [step, setStep] = useState(1);
+
   const [selectedAgent, setSelectedAgent] = useState<boolean[]>(
     Array(24)
       .fill(null)
       .map(() => false),
   );
   const [selectedAgentNumber, setSelectedAgentNumber] = useState<number[]>([]);
-  const router = useRouter();
+  const [isDateModalOpen, setIsDateModalOpen] = useState(false);
+  const [isComfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const checkSelectedAgent = () => {
     return selectedAgent.findIndex((value) => value) > -1;
@@ -37,6 +38,15 @@ const OnBoarding = () => {
         return list;
       }
     }, [] as number[]);
+  };
+  const handleOpenConfirmModal = () => {
+    setIsConfirmModalOpen(true);
+  };
+  const handleCloseConfirmModal = () => {
+    setIsConfirmModalOpen(false);
+  };
+  const handleDateModalOpen = () => {
+    setIsDateModalOpen(true);
   };
   const handleNextStepClick = () => {
     setStep((step) => step + 1);
@@ -114,7 +124,7 @@ const OnBoarding = () => {
       }
       return (
         <>
-          <Button disabled shape="round" width="100%" onClick={handleNextStepClick}>
+          <Button disabled shape="round" width="100%">
             선택 완료
           </Button>
           <Button color="secondary" shape="round" width="100%">
@@ -128,7 +138,7 @@ const OnBoarding = () => {
           <Button shape="round" width="100%" onClick={handleBeforeCreateClick}>
             네
           </Button>
-          <Button color="secondary" shape="round" width="100%">
+          <Button color="secondary" shape="round" width="100%" onClick={handleDateModalOpen}>
             아니요
           </Button>
         </>
@@ -147,9 +157,8 @@ const OnBoarding = () => {
       <ProgressBar totalStep={5} currentStep={3 + step} />
       {renderPage()}
       <ButtonWrap>{renderButton()}</ButtonWrap>
-      {/* <OnboardingRegisterBottomModal visible={true} handleOverlayClick={() => {}} />
       <SmallModalBox
-        visible={true}
+        visible={isComfirmModalOpen}
         title={"개설일 입력을 그만하시겠어요?"}
         content={
           <span>
@@ -158,13 +167,18 @@ const OnBoarding = () => {
           </span>
         }
         buttonText={["그만할래요.", "입력할게요."]}
-        handlePrimaryButtonClick={function (): void {
-          throw new Error("Function not implemented.");
-        }}
+        handlePrimaryButtonClick={handleCloseConfirmModal}
         setIsModalShowing={() => {
           console.log("good");
         }}
-      /> */}
+      />
+      <SelectDate
+        visible={isDateModalOpen}
+        setInvisible={handleOpenConfirmModal}
+        onClick={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
     </OnboardingWrap>
   );
 };

@@ -8,6 +8,10 @@ import SmallModalBox from "../SmallModalBox";
 import { ModalData, initalModalData } from "@/components/mypage/MenuSection";
 import { myAccountType } from "@/types";
 import { deleteMyAccount } from "@/api/account";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import queryKeys from "@/constants/queryKeys";
+import { ToastAtom } from "@/recoil/toastState";
+import { useSetRecoilState } from "recoil";
 
 interface BottomSheetAccountMenuProps {
   /**
@@ -24,6 +28,13 @@ const BottomSheetAccountMenu: FC<BottomSheetAccountMenuProps> = (props) => {
   const { selectedAccount, handleClose } = props;
   const [isShowingSelectDate, setIsShowingSelectDate] = useState(false);
   const [isShowingDeleteModal, setIsShowingDeleteModal] = useState<ModalData>(initalModalData);
+  const setToastString = useSetRecoilState(ToastAtom);
+  const queryClient = useQueryClient();
+  const { mutate: deleteAccount } = useMutation((id: string) => deleteMyAccount(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(queryKeys.MY_ACCOUNTS);
+    },
+  });
 
   return (
     <BottomSheetAccountMenuWrapper>
@@ -34,7 +45,9 @@ const BottomSheetAccountMenu: FC<BottomSheetAccountMenuProps> = (props) => {
             setIsShowingDeleteModal({
               title: "계좌를 삭제하시겠습니까?",
               buttonText: ["취소", "확인"],
-              handlePrimaryButtonClick: () => setIsShowingDeleteModal(initalModalData),
+              handlePrimaryButtonClick: () => {
+                setIsShowingDeleteModal(initalModalData);
+              },
             })
           }
         >
@@ -47,15 +60,20 @@ const BottomSheetAccountMenu: FC<BottomSheetAccountMenuProps> = (props) => {
       <SelectDate
         selectedAccount={selectedAccount}
         visible={isShowingSelectDate}
-        setInvisible={() => setIsShowingSelectDate(false)}
+        setInvisible={() => {
+          setIsShowingSelectDate(false);
+          handleClose();
+        }}
       ></SelectDate>
       <SmallModalBox
         visible={isShowingDeleteModal.title.length > 0}
         title={isShowingDeleteModal.title}
         buttonText={isShowingDeleteModal.buttonText}
         handlePrimaryButtonClick={() => {
-          deleteMyAccount(selectedAccount.id);
-          window.location.reload();
+          deleteAccount(selectedAccount.id);
+          setIsShowingDeleteModal(initalModalData);
+          handleClose();
+          setToastString("계좌가 삭제되었어요.");
         }}
         setIsModalShowing={setIsShowingDeleteModal}
       />

@@ -63,3 +63,9 @@ export interface AgentRegisterType {
   agentId: number;
   registeredAt: string;
 }
+
+export interface MemberInfoType {
+  id: number;
+  email: string;
+  name: string;
+}

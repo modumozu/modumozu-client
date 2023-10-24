@@ -11,6 +11,7 @@ import AddAccount from "./AddAccount";
 import { BottomSheet } from "../common/bottomSheet/BottomSheet";
 import BottomSheetAccountMenu from "../common/bottomSheet/BottomSheetAccountMenu";
 import { myAccountType } from "@/types";
+import Toast from "../common/Toast";
 
 interface AccountsProps {
   myAccounts: myAccountType[];
@@ -71,6 +72,7 @@ const Accounts: FC<AccountsProps> = (props) => {
       <BottomSheet visible={isShowingMenu} handleOverlayClick={() => setIsShowingMenu(false)}>
         <BottomSheetAccountMenu selectedAccount={selectedAccount} handleClose={() => setIsShowingMenu(false)} />
       </BottomSheet>
+      <Toast bottom="82px" />
     </>
   );
 };

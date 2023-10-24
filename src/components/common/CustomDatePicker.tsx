@@ -13,7 +13,6 @@ interface CustomDatePickerProps {
 
 const CustomDatePicker: FC<CustomDatePickerProps> = (props) => {
   const { selectedDate, onChange } = props;
-  // const [selectedDate, setSelectedDate] = useState<Date | null>();
   const inputRef = useRef(null);
 
   const CustomInput = forwardRef(function fn(props: any, ref) {

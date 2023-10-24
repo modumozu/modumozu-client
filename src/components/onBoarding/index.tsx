@@ -12,11 +12,21 @@ import colors from "@/styles/colors";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 import SmallModalBox from "../common/SmallModalBox";
-import SelectDate from "./SelectDate";
+import { useMutation } from "@tanstack/react-query";
+import BottomSheetSelectDate from "@/components/common/bottomSheet/BottomSheetSelectDate";
+import { addMyAccounts } from "@/api/account";
+import { AgentRegisterType } from "@/types";
+
+type SelectDateType = "select" | "today" | "month";
 
 const OnBoarding = () => {
   const router = useRouter();
   const [step, setStep] = useState(1);
+  const { mutate } = useMutation(addMyAccounts, {
+    onSuccess: () => {
+      moveToHome();
+    },
+  });
 
   const [selectedAgent, setSelectedAgent] = useState<boolean[]>(
     Array(24)
@@ -26,9 +36,34 @@ const OnBoarding = () => {
   const [selectedAgentNumber, setSelectedAgentNumber] = useState<number[]>([]);
   const [isDateModalOpen, setIsDateModalOpen] = useState(false);
   const [isComfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date>();
 
   const checkSelectedAgent = () => {
     return selectedAgent.findIndex((value) => value) > -1;
+  };
+
+  const buildRequestAddAccountForm = (type: SelectDateType): AgentRegisterType[] => {
+    const accountList = buildSelectedAgentList();
+
+    const getDate = (type: SelectDateType) => {
+      switch (type) {
+        case "month":
+          return dayjs().subtract(30, "day").format("YYYY-MM-DD");
+        case "select":
+          return dayjs(selectedDate).format("YYYY-MM-DD");
+        case "today":
+          return dayjs().format("YYYY-MM-DD");
+        default:
+          return dayjs().format("YYYY-MM-DD");
+      }
+    };
+
+    return accountList.map((agentId) => {
+      return {
+        agentId,
+        registeredAt: getDate(type),
+      };
+    });
   };
   const buildSelectedAgentList = () => {
     return selectedAgent.reduce((list, value, index) => {
@@ -38,6 +73,9 @@ const OnBoarding = () => {
         return list;
       }
     }, [] as number[]);
+  };
+  const handleDateChange = (date: Date) => {
+    setSelectedDate(date);
   };
   const handleOpenConfirmModal = () => {
     setIsConfirmModalOpen(true);
@@ -62,7 +100,13 @@ const OnBoarding = () => {
       setSelectedAgent(temp);
     }
   };
-  const handleBeforeCreateClick = () => {
+  const handleSendFormClick = (type: SelectDateType) => {
+    return () => {
+      const formData = buildRequestAddAccountForm(type);
+      mutate(formData);
+    };
+  };
+  const moveToHome = () => {
     router.push("/home");
   };
 
@@ -116,7 +160,7 @@ const OnBoarding = () => {
             <Button shape="round" width="100%" onClick={handleNextStepClick}>
               선택 완료
             </Button>
-            <Button color="secondary" shape="round" width="100%">
+            <Button color="secondary" shape="round" width="100%" onClick={moveToHome}>
               보유 계좌 없음
             </Button>
           </>
@@ -127,7 +171,7 @@ const OnBoarding = () => {
           <Button disabled shape="round" width="100%">
             선택 완료
           </Button>
-          <Button color="secondary" shape="round" width="100%">
+          <Button color="secondary" shape="round" width="100%" onClick={moveToHome}>
             보유 계좌 없음
           </Button>
         </>
@@ -135,7 +179,7 @@ const OnBoarding = () => {
     } else {
       return (
         <>
-          <Button shape="round" width="100%" onClick={handleBeforeCreateClick}>
+          <Button shape="round" width="100%" onClick={handleSendFormClick("month")}>
             네
           </Button>
           <Button color="secondary" shape="round" width="100%" onClick={handleDateModalOpen}>
@@ -168,16 +212,15 @@ const OnBoarding = () => {
         }
         buttonText={["그만할래요.", "입력할게요."]}
         handlePrimaryButtonClick={handleCloseConfirmModal}
-        onClose={() => {
-          console.log("good");
-        }}
+        onClose={handleSendFormClick("today")}
       />
-      <SelectDate
+      <BottomSheetSelectDate
         visible={isDateModalOpen}
         setInvisible={handleOpenConfirmModal}
-        onClick={function (): void {
-          throw new Error("Function not implemented.");
-        }}
+        onClick={handleSendFormClick("select")}
+        selectedDate={selectedDate}
+        disableButton={!selectedDate}
+        onDateChange={handleDateChange}
       />
     </OnboardingWrap>
   );

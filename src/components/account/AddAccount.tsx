@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import queryKeys from "@/constants/queryKeys";
 import { useSetRecoilState } from "recoil";
 import { ToastAtom } from "@/recoil/toastState";
+import dayjs from "dayjs";
 
 interface AddAccountProps {
   /**
@@ -39,6 +40,37 @@ const AddAccount: FC<AddAccountProps> = (props) => {
       queryClient.invalidateQueries(queryKeys.MY_ACCOUNTS);
     },
   });
+
+  const handleAgentChange = (selectedBoxIndex: number, agentId: number) => {
+    setAccounts((prev) => {
+      const newPrev = [...prev];
+      newPrev.splice(selectedBoxIndex, 1, {
+        agentId,
+        registeredAt: prev[selectedBoxIndex].registeredAt,
+      });
+      return newPrev;
+    });
+  };
+  const hamdleRemoveClick = (idx: number) => {
+    setAccounts((prev) => {
+      const newPrev = [...prev];
+      newPrev.splice(idx, 1);
+      return newPrev;
+    });
+  };
+  const handleDateChange = (index: number) => {
+    return (date: Date) => {
+      setAccounts((prev) => {
+        const newPrev = [...prev];
+        newPrev.splice(index, 1, {
+          agentId: prev[index].agentId,
+          registeredAt: dayjs(date).format("YYYY-MM-DD"),
+        });
+        return newPrev;
+      });
+    };
+  };
+
   return (
     <FullScreenModal visible={visible} setInvisible={setInvisible}>
       <FullScreenModalDescription>
@@ -65,7 +97,12 @@ const AddAccount: FC<AddAccountProps> = (props) => {
         >
           <PlusIcon /> 새 계좌 추가
         </AddAccountButton>
-        <AddAccountBoxList accounts={accounts} setAccounts={setAccounts} />
+        <AddAccountBoxList
+          accounts={accounts}
+          onDateChange={handleDateChange}
+          onRemoveClick={hamdleRemoveClick}
+          onAgentChange={handleAgentChange}
+        />
       </section>
       <ButtonSection>
         <Button

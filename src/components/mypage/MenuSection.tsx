@@ -27,13 +27,26 @@ const MenuSection = () => {
   const { mutate: withdrawal } = useMutation(deleteMember);
   const router = useRouter();
 
+  const handleCloseComfirmModal = () => {
+    setIsModalShowing(initalModalData);
+  };
+  const handleLogoutClick = () => {
+    setIsModalShowing(logoutModalData);
+  };
+  const showDeleteAlertModal = () => {
+    setIsModalShowing(withdrawalDoneModalData);
+  };
+  const handleDeleteClick = () => {
+    setIsModalShowing(withdrawalAskModalData);
+  };
+
   const logoutModalData: ModalData = {
     title: "로그아웃하시겠습니까?",
     buttonText: ["취소", "확인"],
     handlePrimaryButtonClick: () => {
       // TODO: 로그인 방식 변경되면 수정
       removeAllTokens();
-      setIsModalShowing(initalModalData);
+      handleCloseComfirmModal();
       router.push("/");
     },
   };
@@ -42,7 +55,7 @@ const MenuSection = () => {
     title: "모두모주 탈퇴가 완료되었습니다.",
     buttonText: "다음에 또 올게요.",
     handlePrimaryButtonClick: () => {
-      setIsModalShowing(initalModalData);
+      handleCloseComfirmModal();
       router.push("/");
     },
   };
@@ -54,7 +67,7 @@ const MenuSection = () => {
     handlePrimaryButtonClick: () => {
       withdrawal();
       removeAllTokens();
-      setIsModalShowing(withdrawalDoneModalData);
+      showDeleteAlertModal();
     },
   };
 
@@ -67,8 +80,8 @@ const MenuSection = () => {
             window.open("https://almond-sand-202.notion.site/FAQ-49d2dd9ff6d640df9751e14aee7a8a6f", "_blank");
           }}
         />
-        <MenuList menuName="로그아웃" handleClick={() => setIsModalShowing(logoutModalData)} />
-        <MenuList menuName="탈퇴하기" handleClick={() => setIsModalShowing(withdrawalAskModalData)} />
+        <MenuList menuName="로그아웃" handleClick={handleLogoutClick} />
+        <MenuList menuName="탈퇴하기" handleClick={handleDeleteClick} />
       </MenuGroup>
       <MenuGroup>
         <MenuList
@@ -90,7 +103,7 @@ const MenuSection = () => {
         content={isModalShowing.content}
         buttonText={isModalShowing.buttonText}
         handlePrimaryButtonClick={isModalShowing.handlePrimaryButtonClick}
-        setIsModalShowing={setIsModalShowing}
+        onClose={handleCloseComfirmModal}
       />
     </SectionWrapper>
   );

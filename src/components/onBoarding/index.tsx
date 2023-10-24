@@ -168,7 +168,7 @@ const OnBoarding = () => {
         }
         buttonText={["그만할래요.", "입력할게요."]}
         handlePrimaryButtonClick={handleCloseConfirmModal}
-        setIsModalShowing={() => {
+        onClose={() => {
           console.log("good");
         }}
       />

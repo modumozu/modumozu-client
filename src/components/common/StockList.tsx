@@ -8,6 +8,7 @@ import RestrictionTipBottomSheet from "../home/modal/RestrictionTipBottomSheet";
 import RestrictionDetailFull from "../home/modal/RestrictionDetailFull";
 import OpenAccountBottomSheet from "../home/modal/OpenAccountBottomSheet";
 import OpenAccountFull from "../home/modal/OpenAccountFull";
+import { useRouter } from "next/navigation";
 
 interface StockListProps {
   isLoading: boolean;
@@ -30,6 +31,7 @@ const StockList: FC<StockListProps> = (props) => {
   const [isShowingDisableStocksModal, setIsShowingDisableStocksModal] = useState(0);
   const [isShowingAgentListBottomSheet, setIsShowinAgentListBottomSheet] = useState<AgentList>(emptyAgentList);
   const [isShowingDetailModal, setIsShowingDetailModal] = useState(false);
+  const router = useRouter();
 
   const getCardButtonClickHandler = (data: StockInfoType) => {
     const agents = [...data.remainAgents, ...data.nonRemainAgents];
@@ -74,6 +76,7 @@ const StockList: FC<StockListProps> = (props) => {
                 proposalAgent={data.proposal.agentId}
                 proposalEndDate={data.proposal.needAt}
                 onClick={() => getCardButtonClickHandler(data)}
+                handleCardClick={() => router.push(`/detail/${data.id}`)}
               />
             </UpcomingStockItem>
           ))}

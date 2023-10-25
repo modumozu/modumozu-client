@@ -13,6 +13,7 @@ import POInfo from "@/components/detail/POInfo";
 import queryKeys from "@/constants/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 import { NextPage } from "next";
+import { useState } from "react";
 
 interface DetailProps {
   params: { id: string };
@@ -20,6 +21,7 @@ interface DetailProps {
 
 const Detail: NextPage<DetailProps> = ({ params }) => {
   const id = params.id;
+  const [tabState, setTabState] = useState(true);
 
   const { data, isLoading } = useQuery(queryKeys.DETAIL, () => {
     return getDetailById(id);
@@ -65,6 +67,7 @@ const Detail: NextPage<DetailProps> = ({ params }) => {
             subscriptionDepositRate={data.subscriptionDepositRate}
             investorCompetitionRate={data.investorCompetitionRate}
             mandatoryHoldingCommitmentRate={data.mandatoryHoldingCommitmentRate}
+            resetTabState={() => setTabState(true)}
           />
         </DetailCard.item>
         <DetailCard.item>
@@ -75,26 +78,36 @@ const Detail: NextPage<DetailProps> = ({ params }) => {
             listingAt={data.listingAt}
             offerBeginAt={data.offerBeginAt}
             offerEndAt={data.offerEndAt}
+            state={tabState}
+            setState={setTabState}
           />
         </DetailCard.item>
-        <DetailCard.item>
-          <POInfo
-            fixedOfferPrice={data.fixedOfferPrice || data.minDesiredOfferPrice}
-            publicOfferingTotalPrice={data.publicOfferingTotalPrice}
-            publicOfferingAmount={data.publicOfferingAmount}
-            subscriptionDepositRate={data.subscriptionDepositRate}
-          />
-        </DetailCard.item>
-        <DetailCard.item>
-          <InvestCompetition investorCompetitionRate={data.investorCompetitionRate} />
-        </DetailCard.item>
-        <DetailCard.item>
-          <IPOConfirm
-            mandatoryHoldingCommitmentRate={data.mandatoryHoldingCommitmentRate}
-            data={buildMandatoryHoldingCommitmentRate()}
-          />
-          <DetailBottomButton proposal={data.proposal} offerBeginAt={data.offerBeginAt} offerEndAt={data.offerEndAt} />
-        </DetailCard.item>
+        {tabState && (
+          <>
+            <DetailCard.item>
+              <POInfo
+                fixedOfferPrice={data.fixedOfferPrice || data.minDesiredOfferPrice}
+                publicOfferingTotalPrice={data.publicOfferingTotalPrice}
+                publicOfferingAmount={data.publicOfferingAmount}
+                subscriptionDepositRate={data.subscriptionDepositRate}
+              />
+            </DetailCard.item>
+            <DetailCard.item>
+              <InvestCompetition investorCompetitionRate={data.investorCompetitionRate} />
+            </DetailCard.item>
+            <DetailCard.item>
+              <IPOConfirm
+                mandatoryHoldingCommitmentRate={data.mandatoryHoldingCommitmentRate}
+                data={buildMandatoryHoldingCommitmentRate()}
+              />
+              <DetailBottomButton
+                proposal={data.proposal}
+                offerBeginAt={data.offerBeginAt}
+                offerEndAt={data.offerEndAt}
+              />
+            </DetailCard.item>
+          </>
+        )}
       </DetailCard.wrapper>
     </>
   );

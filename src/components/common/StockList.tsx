@@ -51,6 +51,10 @@ const StockList: FC<StockListProps> = (props) => {
     });
   };
 
+  const handleBottomSheetAgentClick = (id: number) => {
+    setIsShowingDisableStocksModal(id);
+  };
+
   return (
     <>
       <UpcomingStockList>
@@ -87,7 +91,7 @@ const StockList: FC<StockListProps> = (props) => {
       <OpenAccountBottomSheet
         stockName={isShowingAgentListBottomSheet.name}
         agents={isShowingAgentListBottomSheet.agents}
-        setIsShowingDisableStocksModal={setIsShowingDisableStocksModal}
+        onInvestmentBankClick={handleBottomSheetAgentClick}
         handleClose={() => setIsShowinAgentListBottomSheet(emptyAgentList)}
       />
       <OpenAccountFull

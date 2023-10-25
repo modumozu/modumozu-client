@@ -3,7 +3,7 @@ import CaretIcon from "@/svg/CaretIcon";
 import { getFonts } from "@/styles/fonts";
 import CircledXIcon from "@/svg/CircledXIcon";
 import styled from "styled-components";
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { FC, useState } from "react";
 import { BottomSheet } from "../common/bottomSheet/BottomSheet";
 import AgentSelector from "./AgentSelector";
 import { getBankName } from "@/util/getBankName";
@@ -12,19 +12,18 @@ import { AgentRegisterType } from "@/types";
 
 interface AddAccountBoxListProps {
   accounts: AgentRegisterType[];
-  setAccounts: Dispatch<SetStateAction<AgentRegisterType[]>>;
+  onDateChange: (index: number) => (date: Date) => void;
+  onRemoveClick: (index: number) => void;
+  onAgentChange: (boxIndex: number, agentId: number) => void;
 }
 
 const AddAccountBoxList: FC<AddAccountBoxListProps> = (props) => {
-  const { accounts, setAccounts } = props;
+  const { accounts, onRemoveClick, onDateChange, onAgentChange } = props;
   const [isAgentSelectorShowing, setIsAgentSelectorShowing] = useState(-1);
 
-  const removeBox = (idx: number) => {
-    setAccounts((prev) => {
-      const newPrev = [...prev];
-      newPrev.splice(idx, 1);
-      return newPrev;
-    });
+  const handleAgentClick = (boxIndex: number, agentId: number) => {
+    onAgentChange(boxIndex, agentId);
+    setIsAgentSelectorShowing(-1);
   };
 
   return (
@@ -33,22 +32,25 @@ const AddAccountBoxList: FC<AddAccountBoxListProps> = (props) => {
         <AddAccountBox key={idx}>
           <AddAccountTitle>
             <h5>새 계좌</h5>
-            {accounts.length > 1 && <CircledXIcon onClick={() => removeBox(idx)} />}
+            {accounts.length > 1 && <CircledXIcon onClick={() => onRemoveClick(idx)} />}
           </AddAccountTitle>
           <ButtonGroup>
             <AgentSelectButton onClick={() => setIsAgentSelectorShowing(idx)}>
               {item.agentId !== 0 ? <p>{getBankName(item.agentId)}</p> : "증권사 선택"}
               <CaretIcon.down />
             </AgentSelectButton>
-            <CustomDatePicker boxIdx={idx} setAccounts={setAccounts} />
+            <CustomDatePicker
+              selectedDate={!!item.registeredAt ? new Date(item.registeredAt) : undefined}
+              onChange={onDateChange(idx)}
+            />
           </ButtonGroup>
         </AddAccountBox>
       ))}
       <BottomSheet visible={isAgentSelectorShowing >= 0} handleOverlayClick={() => setIsAgentSelectorShowing(-1)}>
         <AgentSelector
-          setAccounts={setAccounts}
           isAgentSelectorShowing={isAgentSelectorShowing}
           setIsAgentSelectorShowing={setIsAgentSelectorShowing}
+          onChange={handleAgentClick}
         />
       </BottomSheet>
     </>

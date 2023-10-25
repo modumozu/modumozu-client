@@ -3,7 +3,7 @@ import styled from "styled-components";
 import colors from "@/styles/colors";
 import Modal from "../Modal";
 
-interface BottomSheetProps {
+export interface BottomSheetProps {
   /**
    * 화면에 노출 시킬지 여부
    */

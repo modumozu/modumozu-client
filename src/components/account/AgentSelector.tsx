@@ -5,18 +5,17 @@ import getInvestmentBankLogo from "@/util/getInvestmentBankLogo";
 import { getBankName } from "@/util/getBankName";
 import { BottomSheetTitle } from "../common/bottomSheet/BottomSheetTitle";
 import Button from "../common/Button";
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { FC, useState } from "react";
 import CircledCheckIcon from "@/svg/CircledCheckIcon";
-import { AgentRegisterType } from "@/types";
 
 interface AgentSelectorProps {
-  setAccounts: Dispatch<SetStateAction<AgentRegisterType[]>>;
+  onChange: (boxIndex: number, agentId: number) => void;
   isAgentSelectorShowing: number;
   setIsAgentSelectorShowing: (v: number) => void;
 }
 
 const AgentSelector: FC<AgentSelectorProps> = (props) => {
-  const { setAccounts, isAgentSelectorShowing, setIsAgentSelectorShowing } = props;
+  const { isAgentSelectorShowing, setIsAgentSelectorShowing, onChange } = props;
   const [selectedAgent, setSelectedAgent] = useState(0);
   const allInvestmentBanks = Array.from({ length: 23 }, (v, i) => i + 1);
   return (
@@ -43,15 +42,7 @@ const AgentSelector: FC<AgentSelectorProps> = (props) => {
         <Button
           disabled={selectedAgent <= 0}
           onClick={() => {
-            setAccounts((prev) => {
-              const newPrev = [...prev];
-              newPrev.splice(isAgentSelectorShowing, 1, {
-                agentId: selectedAgent,
-                registeredAt: prev[isAgentSelectorShowing].registeredAt,
-              });
-              return newPrev;
-            });
-            setIsAgentSelectorShowing(-1);
+            onChange(isAgentSelectorShowing, selectedAgent);
           }}
         >
           선택 완료

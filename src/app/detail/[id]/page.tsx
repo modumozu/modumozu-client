@@ -5,7 +5,7 @@ import DetailBottomButton from "@/components/detail/DetailBottomButton";
 import DetailCard from "@/components/detail/DetailCard";
 import DetailHeader from "@/components/detail/DetailHeader";
 import DetailTitle from "@/components/detail/DetailTitle";
-import IPOConfirm, { IPOComfirmTableData } from "@/components/detail/IPOConfirm";
+import IPOConfirm from "@/components/detail/IPOConfirm";
 import IPOInfo from "@/components/detail/IPOInfo";
 import IPOTapMenu from "@/components/detail/IPOTapMenu";
 import InvestCompetition from "@/components/detail/InvestCompetition";
@@ -27,7 +27,7 @@ const Detail: NextPage<DetailProps> = ({ params }) => {
   const { data: news = [], isLoading: isNewsLoading } = useQuery(queryKeys.NEWS, () => {
     return getDetailNewsById(id);
   });
-  const buildMandatoryHoldingCommitmentRate = (): IPOComfirmTableData => {
+  const buildMandatoryHoldingCommitmentRate = () => {
     if (data) {
       return [
         { label: "15일", value: data.subscriptionAmountByPeriod15Days },

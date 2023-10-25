@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import colors from "@/styles/colors";
 import { getFonts } from "@/styles/fonts";
@@ -105,8 +105,7 @@ const ContentWrap = styled.div`
   overflow: hidden;
 `;
 const ButtonWrap = styled.div`
-  gap: 8px 0;
-  width: calc(100%);
+  width: 100%;
   height: 100px;
   position: absolute;
   bottom: 20px;

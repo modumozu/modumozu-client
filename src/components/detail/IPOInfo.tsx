@@ -4,15 +4,54 @@ import colors from "@/styles/colors";
 import { getFonts } from "@/styles/fonts";
 import CaretIcon from "@/svg/CaretIcon";
 import GuideIcon from "@/svg/GuideIcon";
-import { useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import styled from "styled-components";
 import { BottomSheet } from "../common/bottomSheet/BottomSheet";
 import { BottomSheetGuide } from "../common/bottomSheet/BottomSheetGuide";
+import { getBankName } from "@/util/getBankName";
 
 export type BottomSheetStatus = "NONE" | "DEPOSIT" | "COMPETITION" | "RETENTION_COMMITMENT";
 
-const IPOInfo = () => {
+interface IPOInfoProps {
+  nonRemainAgents: number[];
+  remainAgents: number[];
+  publicOfferingTotalPrice: number;
+  subscriptionDepositRate: number;
+  investorCompetitionRate: number;
+  mandatoryHoldingCommitmentRate: number;
+}
+
+const IPOInfo: FC<IPOInfoProps> = (props) => {
+  const {
+    nonRemainAgents,
+    remainAgents,
+    publicOfferingTotalPrice,
+    subscriptionDepositRate,
+    investorCompetitionRate,
+    mandatoryHoldingCommitmentRate,
+  } = props;
   const [isModalShowing, setIsModalShowing] = useState<BottomSheetStatus>("NONE");
+  const [isShowAllAgent, setIsShowAgent] = useState(false);
+
+  const handleAgentListButtonClick = () => {
+    setIsShowAgent((prev) => !prev);
+  };
+
+  const renderRemainAgentList = () => {
+    const mixedList: ReactNode[] = [];
+
+    remainAgents.forEach((id) => {
+      mixedList.push(<li key={id}>{getBankName(id)}</li>);
+    });
+    nonRemainAgents.forEach((id) => {
+      mixedList.push(<li key={id}>{getBankName(id)}</li>);
+    });
+
+    if (isShowAllAgent) {
+      return <>{mixedList}</>;
+    }
+    return <>{mixedList.slice(0, 3)}</>;
+  };
 
   const renderBottomSheet = () => {
     return (
@@ -60,6 +99,27 @@ const IPOInfo = () => {
       </BottomSheet>
     );
   };
+  const renderShowAllAgentButton = () => {
+    if (nonRemainAgents.length + remainAgents.length > 3) {
+      if (isShowAllAgent) {
+        return (
+          <li>
+            <ShowAllAgentButton onClick={handleAgentListButtonClick}>
+              접기 <CaretIcon.up width={16} height={16} color={colors.GRAY[3]} />
+            </ShowAllAgentButton>
+          </li>
+        );
+      }
+      return (
+        <li>
+          <ShowAllAgentButton onClick={handleAgentListButtonClick}>
+            전체 주간사 보기 <CaretIcon.down width={16} height={16} color={colors.GRAY[3]} />
+          </ShowAllAgentButton>
+        </li>
+      );
+    }
+    return null;
+  };
 
   return (
     <IPOInfoWrap>
@@ -67,23 +127,22 @@ const IPOInfo = () => {
         <IPOInfoRow>
           <IPOIntoLabel>주간사</IPOIntoLabel>
           <IPOInfoValue>
-            <ul>
-              <li>KB증권</li>
-              <li>대신증권</li>
-              <li>미래에셋증권</li>
-            </ul>
+            <IPOInfoAgentList>
+              {renderRemainAgentList()}
+              {renderShowAllAgentButton()}
+            </IPOInfoAgentList>
           </IPOInfoValue>
         </IPOInfoRow>
         <IPOInfoRow>
           <IPOIntoLabel>공모가</IPOIntoLabel>
-          <IPOInfoValue>공모가</IPOInfoValue>
+          <IPOInfoValue>{publicOfferingTotalPrice.toLocaleString()}원</IPOInfoValue>
         </IPOInfoRow>
         <IPOInfoRow>
           <IPOIntoLabel>
             청약증거금율
             <GuideIcon onClick={() => setIsModalShowing("DEPOSIT")} />
           </IPOIntoLabel>
-          <IPOInfoValue>50%</IPOInfoValue>
+          <IPOInfoValue>{subscriptionDepositRate}%</IPOInfoValue>
         </IPOInfoRow>
         <IPOInfoRow>
           <IPOIntoLabel>
@@ -91,7 +150,8 @@ const IPOInfo = () => {
             <GuideIcon onClick={() => setIsModalShowing("COMPETITION")} />
           </IPOIntoLabel>
           <IPOInfoValue>
-            516 : 1<CaretButton onClick={() => console.log("hihihi")} width={16} height={16} />
+            {investorCompetitionRate}
+            <CaretButton onClick={() => console.log("hihihi")} width={16} height={16} />
           </IPOInfoValue>
         </IPOInfoRow>
         <IPOInfoRow>
@@ -100,7 +160,7 @@ const IPOInfo = () => {
             <GuideIcon onClick={() => setIsModalShowing("RETENTION_COMMITMENT")} />
           </IPOIntoLabel>
           <IPOInfoValue>
-            의무보유 확약률
+            {mandatoryHoldingCommitmentRate}%
             <CaretButton onClick={() => console.log("hihihi")} width={16} height={16} />
           </IPOInfoValue>
         </IPOInfoRow>
@@ -140,7 +200,24 @@ const IPOInfoValue = styled.div`
   ${getFonts("H5_MEDIUM")}
   color:${colors.FONT_LIGHT.PRIMARY};
 `;
+const IPOInfoAgentList = styled.ul`
+  > li + li {
+    margin-top: 8px;
+  }
+`;
 const CaretButton = styled(CaretIcon.right)`
   margin-left: 2px;
   cursor: pointer;
+`;
+const ShowAllAgentButton = styled.button`
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  margin-top: 12px;
+  color: ${colors.FONT_LIGHT.TERIARY};
+  ${getFonts("CAPTION1_SEMIBOLD")}
+  > svg {
+    margin-left: 4px;
+  }
 `;

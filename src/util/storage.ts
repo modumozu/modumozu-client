@@ -10,3 +10,12 @@ export const setStorage = (key: keyof typeof StorageKeys, value: any) => {
     localStorage.setItem(StorageKeys[key], value);
   }
 };
+export const removeStorage = (key: keyof typeof StorageKeys) => {
+  if (typeof window !== "undefined") {
+    return localStorage.removeItem(StorageKeys[key]);
+  }
+};
+export const removeAllTokens = () => {
+  removeStorage("ACCESS_TOKEN");
+  removeStorage("REFRESH_TOKEN");
+};

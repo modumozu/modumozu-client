@@ -1,8 +1,7 @@
 import colors from "@/styles/colors";
 import { getFonts } from "@/styles/fonts";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import styled from "styled-components";
-import { initalModalData, ModalData } from "../mypage/MenuSection";
 import Modal from "./Modal";
 
 interface SmallModalBoxProps {
@@ -17,7 +16,7 @@ interface SmallModalBoxProps {
   /**
    * 모달 박스 내용
    */
-  content?: string;
+  content?: ReactNode;
   /**
    * 모달 버튼 내용
    */
@@ -29,13 +28,13 @@ interface SmallModalBoxProps {
   /**
    * 모달 on/off 핸들러
    */
-  setIsModalShowing: (v: ModalData) => void;
+  onClose: () => void;
 }
 
 const SmallModalBox: FC<SmallModalBoxProps> = (props) => {
-  const { visible, title, content, buttonText, handlePrimaryButtonClick, setIsModalShowing } = props;
+  const { visible, title, content, buttonText, handlePrimaryButtonClick, onClose } = props;
   return (
-    <Modal visible={visible} onOutsideClick={() => setIsModalShowing(initalModalData)}>
+    <Modal visible={visible} onOutsideClick={onClose}>
       <ModalBox onClick={(e) => e.stopPropagation()}>
         <h3>{title}</h3>
         {content ? <p>{content}</p> : null}
@@ -46,11 +45,7 @@ const SmallModalBox: FC<SmallModalBoxProps> = (props) => {
             </ModalButton>
           ) : (
             buttonText.map((text, idx) => (
-              <ModalButton
-                $primary={idx === 1}
-                onClick={idx === 1 ? handlePrimaryButtonClick : () => setIsModalShowing(initalModalData)}
-                key={text}
-              >
+              <ModalButton $primary={idx === 1} onClick={idx === 1 ? handlePrimaryButtonClick : onClose} key={text}>
                 {text}
               </ModalButton>
             ))

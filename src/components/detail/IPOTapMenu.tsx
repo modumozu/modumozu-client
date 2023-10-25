@@ -1,11 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { FC, useState } from "react";
 import TapMenu from "../common/TapMenu";
-import PONews from "./PONews";
 import POPlan from "./POPlan";
+import PONewsList from "./PONewsList";
+import { News } from "@/dto/news";
 
-const IPOTapMenu = () => {
+interface IPOTapMenuProps {
+  news: News[];
+  demandForecastBeginAt: string;
+  refundAt: string;
+  listingAt: string;
+  offerBeginAt: string;
+  offerEndAt: string;
+}
+
+const IPOTapMenu: FC<IPOTapMenuProps> = ({
+  news,
+  demandForecastBeginAt,
+  refundAt,
+  listingAt,
+  offerBeginAt,
+  offerEndAt,
+}) => {
   const [state, setState] = useState(true);
 
   const handleChangeTapMenu = (value: boolean) => {
@@ -22,7 +39,18 @@ const IPOTapMenu = () => {
         ]}
         onChange={handleChangeTapMenu}
       />
-      {state ? <POPlan /> : <PONews />}
+      {state ? (
+        <POPlan
+          plan={[
+            { label: "수요 예측일", date: demandForecastBeginAt },
+            { label: "청약일", date: [offerBeginAt, offerEndAt] },
+            { label: "환불일", date: refundAt },
+            { label: "상장일", date: listingAt === "2000-01-01" ? "" : listingAt },
+          ]}
+        />
+      ) : (
+        <PONewsList newsList={news} />
+      )}
     </div>
   );
 };

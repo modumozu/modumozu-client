@@ -8,6 +8,11 @@ import AddAccountBoxList from "./AddAccountBoxList";
 import FullScreenModal from "../common/FullScreenModal";
 import { AgentRegisterType } from "@/types";
 import { addMyAccounts } from "@/api/account";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import queryKeys from "@/constants/queryKeys";
+import { useSetRecoilState } from "recoil";
+import { ToastAtom } from "@/recoil/toastState";
+import dayjs from "dayjs";
 
 interface AddAccountProps {
   /**
@@ -28,6 +33,43 @@ const emptyAgent: AgentRegisterType = {
 const AddAccount: FC<AddAccountProps> = (props) => {
   const { visible, setInvisible } = props;
   const [accounts, setAccounts] = useState<AgentRegisterType[]>([emptyAgent]);
+  const setToastString = useSetRecoilState(ToastAtom);
+  const queryClient = useQueryClient();
+  const { mutate: addAccounts } = useMutation((accountsList: AgentRegisterType[]) => addMyAccounts(accountsList), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(queryKeys.MY_ACCOUNTS);
+    },
+  });
+
+  const handleAgentChange = (selectedBoxIndex: number, agentId: number) => {
+    setAccounts((prev) => {
+      const newPrev = [...prev];
+      newPrev.splice(selectedBoxIndex, 1, {
+        agentId,
+        registeredAt: prev[selectedBoxIndex].registeredAt,
+      });
+      return newPrev;
+    });
+  };
+  const hamdleRemoveClick = (idx: number) => {
+    setAccounts((prev) => {
+      const newPrev = [...prev];
+      newPrev.splice(idx, 1);
+      return newPrev;
+    });
+  };
+  const handleDateChange = (index: number) => {
+    return (date: Date) => {
+      setAccounts((prev) => {
+        const newPrev = [...prev];
+        newPrev.splice(index, 1, {
+          agentId: prev[index].agentId,
+          registeredAt: dayjs(date).format("YYYY-MM-DD"),
+        });
+        return newPrev;
+      });
+    };
+  };
 
   return (
     <FullScreenModal visible={visible} setInvisible={setInvisible}>
@@ -55,15 +97,22 @@ const AddAccount: FC<AddAccountProps> = (props) => {
         >
           <PlusIcon /> 새 계좌 추가
         </AddAccountButton>
-        <AddAccountBoxList accounts={accounts} setAccounts={setAccounts} />
+        <AddAccountBoxList
+          accounts={accounts}
+          onDateChange={handleDateChange}
+          onRemoveClick={hamdleRemoveClick}
+          onAgentChange={handleAgentChange}
+        />
       </section>
       <ButtonSection>
         <Button
           width="100%"
           disabled={accounts.find((item) => item.agentId > 0 && item.registeredAt.length > 0) === undefined}
           onClick={() => {
-            addMyAccounts(accounts.filter((item) => item.agentId > 0 && item.registeredAt.length > 0));
-            window.location.reload();
+            addAccounts(accounts.filter((item) => item.agentId > 0 && item.registeredAt.length > 0));
+            setAccounts([emptyAgent]);
+            setInvisible();
+            setToastString("계좌가 추가되었어요.");
           }}
           $font="BUTTON1_SEMIBOLD"
         >

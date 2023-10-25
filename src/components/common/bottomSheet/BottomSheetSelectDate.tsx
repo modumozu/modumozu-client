@@ -1,19 +1,16 @@
 import styled from "styled-components";
-import Button from "../common/Button";
+import Button from "../Button";
 import { getFonts } from "@/styles/fonts";
-import CustomDatePicker from "../common/CustomDatePicker";
-import { BottomSheet } from "../common/bottomSheet/BottomSheet";
-import { BottomSheetTitle } from "../common/bottomSheet/BottomSheetTitle";
+import CustomDatePicker from "../CustomDatePicker";
+import { BottomSheet } from "./BottomSheet";
+import { BottomSheetTitle } from "./BottomSheetTitle";
 import colors from "@/styles/colors";
-import { useState } from "react";
-import { AgentRegisterType, myAccountType } from "@/types";
-import { modifyMyAccount } from "@/api/account";
 
-interface SelectDateProps {
+interface BottomSheetSelectDateProps {
   /**
-   * 수정 대상 계좌
+   * 선택 완료 버튼 활성화 여부
    */
-  selectedAccount: myAccountType;
+  disableButton: boolean;
   /**
    * 화면에 노출 시킬지 여부
    */
@@ -22,16 +19,22 @@ interface SelectDateProps {
    * 모달 창 끄기
    */
   setInvisible: () => void;
+  /**
+   * 선택 완료를 클릭했을 때
+   */
+  onClick: () => void;
+  /**
+   * 선택한 날짜
+   */
+  selectedDate?: Date;
+  /**
+   * 날짜 변경
+   */
+  onDateChange: (date: Date) => void;
 }
 
-const SelectDate = (props: SelectDateProps) => {
-  const { selectedAccount, visible, setInvisible } = props;
-  const [accounts, setAccounts] = useState<AgentRegisterType[]>([
-    {
-      agentId: selectedAccount.agentId,
-      registeredAt: selectedAccount.registeredAt,
-    },
-  ]);
+const BottomSheetSelectDate = (props: BottomSheetSelectDateProps) => {
+  const { disableButton, visible, setInvisible, selectedDate, onClick, onDateChange } = props;
 
   return (
     <BottomSheet visible={visible} handleOverlayClick={setInvisible}>
@@ -48,22 +51,9 @@ const SelectDate = (props: SelectDateProps) => {
             </li>
           </ul>
         </Description>
-        <CustomDatePicker boxIdx={0} setAccounts={setAccounts} />
+        <CustomDatePicker selectedDate={selectedDate} onChange={onDateChange} />
         <ButtonGroup>
-          <Button
-            color="primary"
-            width="100%"
-            $font="BUTTON1_SEMIBOLD"
-            disabled={selectedAccount.registeredAt === accounts[0].registeredAt}
-            onClick={() => {
-              modifyMyAccount({
-                id: selectedAccount.id,
-                agentId: accounts[0].agentId,
-                registeredAt: accounts[0].registeredAt,
-              });
-              window.location.reload();
-            }}
-          >
+          <Button color="primary" width="100%" $font="BUTTON1_SEMIBOLD" disabled={disableButton} onClick={onClick}>
             선택완료
           </Button>
           <Button color="secondary" fill={false} width="100%" $font="BUTTON1_REGULAR" onClick={setInvisible}>
@@ -75,7 +65,7 @@ const SelectDate = (props: SelectDateProps) => {
   );
 };
 
-export default SelectDate;
+export default BottomSheetSelectDate;
 
 const Description = styled.div`
   margin-top: -8px;

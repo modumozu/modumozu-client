@@ -6,11 +6,12 @@ import colors from "@/styles/colors";
 import { FC } from "react";
 
 export interface IPOConfirmProps {
+  mandatoryHoldingCommitmentRate: number;
   data: { label: string; value: string }[];
 }
-export type IPOComfirmTableData = { label: string; value: string }[];
+export type IPOTableData = { label: string; value: string }[];
 
-const IPOConfirm: FC<IPOConfirmProps> = ({ data = [] }) => {
+const IPOConfirm: FC<IPOConfirmProps> = ({ data = [], mandatoryHoldingCommitmentRate }) => {
   const renderTableData = () => {
     return data.map((data) => {
       return (
@@ -25,7 +26,7 @@ const IPOConfirm: FC<IPOConfirmProps> = ({ data = [] }) => {
   return (
     <IPOConfirmWrap>
       <IPOConfirmTitle>
-        의무보유 확약률<IPOConfirmPercent>11%</IPOConfirmPercent>
+        의무보유 확약률<IPOConfirmPercent>{mandatoryHoldingCommitmentRate}%</IPOConfirmPercent>
       </IPOConfirmTitle>
       <IPOConfirmDescription>
         청약 이후 일정 기간 배정 받은 주식을 보유하는 기관이 많을 수록 상장일에 매도 물량이 적어져 주가 상승의 기회가

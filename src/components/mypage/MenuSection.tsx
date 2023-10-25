@@ -4,6 +4,10 @@ import MenuList from "./MenuList";
 import colors from "@/styles/colors";
 import { useState } from "react";
 import SmallModalBox from "../common/SmallModalBox";
+import { useMutation } from "@tanstack/react-query";
+import { deleteMember } from "@/api/member";
+import { useRouter } from "next/navigation";
+import { removeAllTokens } from "@/util/storage";
 
 export interface ModalData {
   title: string;
@@ -20,24 +24,51 @@ export const initalModalData = {
 
 const MenuSection = () => {
   const [isModalShowing, setIsModalShowing] = useState<ModalData>(initalModalData);
+  const { mutate: withdrawal } = useMutation(deleteMember);
+  const router = useRouter();
+
+  const handleCloseComfirmModal = () => {
+    setIsModalShowing(initalModalData);
+  };
+  const handleLogoutClick = () => {
+    setIsModalShowing(logoutModalData);
+  };
+  const showDeleteAlertModal = () => {
+    setIsModalShowing(withdrawalDoneModalData);
+  };
+  const handleDeleteClick = () => {
+    setIsModalShowing(withdrawalAskModalData);
+  };
 
   const logoutModalData: ModalData = {
     title: "로그아웃하시겠습니까?",
     buttonText: ["취소", "확인"],
-    handlePrimaryButtonClick: () => setIsModalShowing(initalModalData),
+    handlePrimaryButtonClick: () => {
+      // TODO: 로그인 방식 변경되면 수정
+      removeAllTokens();
+      handleCloseComfirmModal();
+      router.push("/");
+    },
   };
 
   const withdrawalDoneModalData: ModalData = {
     title: "모두모주 탈퇴가 완료되었습니다.",
     buttonText: "다음에 또 올게요.",
-    handlePrimaryButtonClick: () => setIsModalShowing(initalModalData),
+    handlePrimaryButtonClick: () => {
+      handleCloseComfirmModal();
+      router.push("/");
+    },
   };
 
   const withdrawalAskModalData: ModalData = {
     title: "탈퇴하시겠습니까?",
     content: "탈퇴 시 모든 정보는\n삭제되며 복구는 불가능합니다.\n정말 탈퇴하시겠습니까?",
     buttonText: ["더써볼래요", "탈퇴할게요"],
-    handlePrimaryButtonClick: () => setIsModalShowing(withdrawalDoneModalData),
+    handlePrimaryButtonClick: () => {
+      withdrawal();
+      removeAllTokens();
+      showDeleteAlertModal();
+    },
   };
 
   return (
@@ -49,8 +80,8 @@ const MenuSection = () => {
             window.open("https://almond-sand-202.notion.site/FAQ-49d2dd9ff6d640df9751e14aee7a8a6f", "_blank");
           }}
         />
-        <MenuList menuName="로그아웃" handleClick={() => setIsModalShowing(logoutModalData)} />
-        <MenuList menuName="탈퇴하기" handleClick={() => setIsModalShowing(withdrawalAskModalData)} />
+        <MenuList menuName="로그아웃" handleClick={handleLogoutClick} />
+        <MenuList menuName="탈퇴하기" handleClick={handleDeleteClick} />
       </MenuGroup>
       <MenuGroup>
         <MenuList
@@ -72,7 +103,7 @@ const MenuSection = () => {
         content={isModalShowing.content}
         buttonText={isModalShowing.buttonText}
         handlePrimaryButtonClick={isModalShowing.handlePrimaryButtonClick}
-        setIsModalShowing={setIsModalShowing}
+        onClose={handleCloseComfirmModal}
       />
     </SectionWrapper>
   );

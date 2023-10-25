@@ -6,9 +6,10 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import StockList from "../common/StockList";
 import { fetchUpcomingStocks } from "@/api/ipo";
+import queryKeys from "@/constants/queryKeys";
 
 const UpcomingStockSection = () => {
-  const { isLoading, data } = useQuery({ queryKey: ["fetchUpcomingStocks"], queryFn: fetchUpcomingStocks });
+  const { isLoading, data } = useQuery({ queryKey: queryKeys.UPCOMING, queryFn: fetchUpcomingStocks });
   const [isShowingAllStocks, setIsShowingAllStocks] = useState(false);
 
   const allUpcomingStockData = data?.ipos ?? [];

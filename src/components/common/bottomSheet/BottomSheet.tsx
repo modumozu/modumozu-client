@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import styled from "styled-components";
 import colors from "@/styles/colors";
 import Modal from "../Modal";
@@ -20,6 +20,12 @@ export interface BottomSheetProps {
 
 export const BottomSheet: FC<BottomSheetProps> = (props) => {
   const { visible, handleOverlayClick, children } = props;
+
+  useEffect(() => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+  }, []);
+
   return (
     <Modal visible={visible} onOutsideClick={handleOverlayClick}>
       <BottomSheetWrapper>

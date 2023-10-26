@@ -10,6 +10,7 @@ import { BottomSheet } from "../common/bottomSheet/BottomSheet";
 import { BottomSheetGuide } from "../common/bottomSheet/BottomSheetGuide";
 import { getBankName } from "@/util/getBankName";
 
+
 export type BottomSheetStatus = "NONE" | "DEPOSIT" | "COMPETITION" | "RETENTION_COMMITMENT";
 
 interface IPOInfoProps {

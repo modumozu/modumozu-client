@@ -2,7 +2,7 @@ import { FC, forwardRef, useRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
-import "../../../public/datepicker.css";
+import "@/styles/datepicker.css";
 import CaretIcon from "@/svg/CaretIcon";
 import colors from "@/styles/colors";
 

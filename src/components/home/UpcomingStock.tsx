@@ -13,6 +13,7 @@ import Badge from "../common/Badge";
 import { useSetRecoilState } from "recoil";
 import { ToastAtom } from "@/recoil/toastState";
 import { modifyInterestingStock } from "@/api/interesting";
+import { getDiffDate } from "@/util/getDiffDate";
 
 interface UpcomingStockProps {
   children: ReactNode;
@@ -34,6 +35,7 @@ interface UpcomingStockCardProps {
   proposalAgent: number;
   proposalEndDate: string;
   onClick?: () => void;
+  handleCardClick?: () => void;
 }
 
 const UpcomingStockMain: FC<UpcomingStockProps> = ({ children }) => {
@@ -44,9 +46,7 @@ const UpcomingStockStatus: FC<UpcomingStockStatusProps> = ({ startDate, endDate 
   const end = new Date(endDate);
   const current = new Date();
   const today = new Date(current.getFullYear() + "-" + (current.getMonth() + 1) + "-" + current.getDate());
-
-  let diff = Math.abs(start.getTime() - current.getTime());
-  diff = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  const diff = getDiffDate(startDate);
 
   if (today < start) {
     return (
@@ -79,6 +79,7 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
     onClick,
     proposalEndDate,
     proposalAgent,
+    handleCardClick,
   } = props;
   const endDate = new Date(proposalEndDate);
   const [pinned, setPinned] = useState(love);
@@ -128,60 +129,67 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
 
   return (
     <UpcomingStockCardWarp>
-      <UpcomingStockCardTop>
-        <div>
-          <UpcomingStockCardTopCategory>{category}</UpcomingStockCardTopCategory>
-          <UpcomingStockCardTopTitle>{title}</UpcomingStockCardTopTitle>
-        </div>
-        {pinned && (
-          <HeartButton
-            onClick={() => {
-              modifyInterestingStock(id);
-              setPinned((prev) => !prev);
-              setToastString("관심 공모주에서 삭제되었어요.");
-            }}
-          >
-            <HeartIcon.fill color={colors.ON.PRIMARY} />
-          </HeartButton>
-        )}
-      </UpcomingStockCardTop>
-      <UpcomingStockCardInfos>
-        <UpcomingStockCardInfoItem>
-          <MoneyIcon />
-          <span>
-            {price[0] === 0 || price[1] === 0
-              ? "공모가 확인 중"
-              : `${price[0].toLocaleString()}원 ~ ${price[1].toLocaleString()}원`}
-          </span>
-        </UpcomingStockCardInfoItem>
-        <UpcomingStockCardInfoItem>
-          <BankIcon />
-          <UpcomingStockCardInfoAccountList>
-            <UpcomingStockCardInfoAccountListItem>
-              {account.length > 0 && (
-                <>
-                  <span>
-                    {account.slice(0, 2).map((id) => getBankName(id)) +
-                      (account.length > 2 ? ` 외 ${account.length - 2}개` : "")}
-                  </span>
-                  <Badge type="primary">보유</Badge>
-                </>
-              )}
-            </UpcomingStockCardInfoAccountListItem>
-            <UpcomingStockCardInfoAccountListItem>
-              {nonRemainAccounts.length > 0 && (
-                <>
-                  <span>
-                    {nonRemainAccounts.slice(0, 2).map((id) => getBankName(id)) +
-                      (nonRemainAccounts.length > 2 ? ` 외 ${nonRemainAccounts.length - 2}개` : "")}
-                  </span>
-                  <Badge type="secondary">미보유</Badge>
-                </>
-              )}
-            </UpcomingStockCardInfoAccountListItem>
-          </UpcomingStockCardInfoAccountList>
-        </UpcomingStockCardInfoItem>
-      </UpcomingStockCardInfos>
+      <UpcomingStockCardClick
+        onClick={(e) => {
+          handleCardClick && handleCardClick();
+        }}
+      >
+        <UpcomingStockCardTop>
+          <div>
+            <UpcomingStockCardTopCategory>{category}</UpcomingStockCardTopCategory>
+            <UpcomingStockCardTopTitle>{title}</UpcomingStockCardTopTitle>
+          </div>
+          {pinned && (
+            <HeartButton
+              onClick={() => {
+                modifyInterestingStock(id);
+                setPinned((prev) => !prev);
+                setToastString("관심 공모주에서 삭제되었어요.");
+              }}
+            >
+              <HeartIcon.fill color={colors.ON.PRIMARY} />
+            </HeartButton>
+          )}
+        </UpcomingStockCardTop>
+        <UpcomingStockCardInfos>
+          <UpcomingStockCardInfoItem>
+            <MoneyIcon />
+            <span>
+              {price[0] === 0 || price[1] === 0
+                ? "공모가 확인 중"
+                : `${price[0].toLocaleString()}원 ~ ${price[1].toLocaleString()}원`}
+            </span>
+          </UpcomingStockCardInfoItem>
+          <UpcomingStockCardInfoItem>
+            <BankIcon />
+            <UpcomingStockCardInfoAccountList>
+              <UpcomingStockCardInfoAccountListItem>
+                {account.length > 0 && (
+                  <>
+                    <span>
+                      {account.slice(0, 2).map((id) => getBankName(id)) +
+                        (account.length > 2 ? ` 외 ${account.length - 2}개` : "")}
+                    </span>
+                    <Badge type="primary">보유</Badge>
+                  </>
+                )}
+              </UpcomingStockCardInfoAccountListItem>
+              <UpcomingStockCardInfoAccountListItem>
+                {nonRemainAccounts.length > 0 && (
+                  <>
+                    <span>
+                      {nonRemainAccounts.slice(0, 2).map((id) => getBankName(id)) +
+                        (nonRemainAccounts.length > 2 ? ` 외 ${nonRemainAccounts.length - 2}개` : "")}
+                    </span>
+                    <Badge type="secondary">미보유</Badge>
+                  </>
+                )}
+              </UpcomingStockCardInfoAccountListItem>
+            </UpcomingStockCardInfoAccountList>
+          </UpcomingStockCardInfoItem>
+        </UpcomingStockCardInfos>
+      </UpcomingStockCardClick>
+
       {renderSubscription()}
     </UpcomingStockCardWarp>
   );
@@ -203,6 +211,10 @@ const Dot = styled.div`
 const UpcomingStockStatusLabel = styled.span<{ color: string }>`
   margin-right: 6px;
   color: ${({ color }) => color};
+`;
+
+const UpcomingStockCardClick = styled.div`
+  cursor: pointer;
 `;
 
 const UpcomingStockCardTop = styled.div`

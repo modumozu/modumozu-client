@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { NextPage } from "next";
 import { useRef, useState } from "react";
 
+
 interface DetailProps {
   params: { id: string };
 }

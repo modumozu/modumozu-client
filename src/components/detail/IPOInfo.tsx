@@ -13,6 +13,7 @@ import Badge from "../common/Badge";
 import { Status } from "@/dto/detail";
 import { useRouter } from "next/navigation";
 
+
 export type BottomSheetStatus = "NONE" | "DEPOSIT" | "COMPETITION" | "RETENTION_COMMITMENT";
 
 interface IPOInfoProps {

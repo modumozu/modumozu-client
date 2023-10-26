@@ -14,6 +14,7 @@ import queryKeys from "@/constants/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 import { NextPage } from "next";
 
+
 interface DetailProps {
   params: { id: string };
 }

@@ -11,6 +11,8 @@ import { BottomSheetGuide } from "../common/bottomSheet/BottomSheetGuide";
 import { getBankName } from "@/util/getBankName";
 import Badge from "../common/Badge";
 import { Status } from "@/dto/detail";
+import { useRouter } from "next/navigation";
+
 
 export type BottomSheetStatus = "NONE" | "DEPOSIT" | "COMPETITION" | "RETENTION_COMMITMENT";
 
@@ -24,6 +26,7 @@ interface IPOInfoProps {
   subscriptionDepositRate: number;
   investorCompetitionRate: number;
   mandatoryHoldingCommitmentRate: number;
+  resetTabState: () => void;
   onScrollInvestCompetitionClick: () => void;
   onScrollIpoConfirmBoxClick: () => void;
 }
@@ -36,6 +39,7 @@ const IPOInfo: FC<IPOInfoProps> = (props) => {
     subscriptionDepositRate,
     investorCompetitionRate,
     mandatoryHoldingCommitmentRate,
+    resetTabState,
     minDesiredOfferPrice,
     maxDesiredOfferPrice,
     fixedOfferPrice,
@@ -44,6 +48,7 @@ const IPOInfo: FC<IPOInfoProps> = (props) => {
   } = props;
   const [isModalShowing, setIsModalShowing] = useState<BottomSheetStatus>("NONE");
   const [isShowAllAgent, setIsShowAgent] = useState(false);
+  const router = useRouter();
 
   const handleAgentListButtonClick = () => {
     setIsShowAgent((prev) => !prev);

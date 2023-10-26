@@ -91,6 +91,7 @@ const getStoreUrl = (agentId: number) => {
     return googleLink.get(agentId) ?? "";
   }
   return iosLink.get(agentId) ?? "";
+
 };
 
 export default getStoreUrl;

@@ -2,18 +2,18 @@
 
 import colors from "@/styles/colors";
 import { getFonts } from "@/styles/fonts";
-import { forwardRef } from "react";
+import { FC } from "react";
 import styled from "styled-components";
 
 interface InvestCompetitionProps {
   investorCompetitionRate: number;
 }
 
-const InvestCompetition = forwardRef<HTMLDivElement, InvestCompetitionProps>(({ investorCompetitionRate }, ref) => {
+const InvestCompetition: FC<InvestCompetitionProps> = ({ investorCompetitionRate }) => {
   return (
-    <InvestCompetitionWrap ref={ref}>
+    <InvestCompetitionWrap>
       <InvestCompetitionTitle>
-        기관투자자 경쟁률{investorCompetitionRate !== 0 && <InvestPercent>{investorCompetitionRate}:1</InvestPercent>}
+        기관투자자 경쟁률<InvestPercent>{investorCompetitionRate}:1</InvestPercent>
       </InvestCompetitionTitle>
       <InvestCompetitionDescription>
         수요 예측에서 기관투자자 경쟁률이 높다면 그만큼 해당 기업의 주식을 받으려는 경쟁이 치열하다고 할 수 있으며
@@ -21,8 +21,7 @@ const InvestCompetition = forwardRef<HTMLDivElement, InvestCompetitionProps>(({ 
       </InvestCompetitionDescription>
     </InvestCompetitionWrap>
   );
-});
-InvestCompetition.displayName = "InvestCompetition";
+};
 
 export default InvestCompetition;
 

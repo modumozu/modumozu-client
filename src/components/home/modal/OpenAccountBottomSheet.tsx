@@ -1,23 +1,23 @@
 import { BottomSheet } from "@/components/common/bottomSheet/BottomSheet";
 import InvestmentBankList from "@/components/common/bottomSheet/InvestmentBankList";
-import React, { FC } from "react";
+import React, { Dispatch, FC, SetStateAction } from "react";
 
 interface OpenAccountBottomSheetProps {
   stockName: string;
   agents: number[];
-  onInvestmentBankClick: (id: number) => void;
+  setIsShowingDisableStocksModal: Dispatch<SetStateAction<number>>;
   handleClose: () => void;
 }
 
 const OpenAccountBottomSheet: FC<OpenAccountBottomSheetProps> = (props) => {
-  const { stockName, agents, onInvestmentBankClick, handleClose } = props;
+  const { stockName, agents, setIsShowingDisableStocksModal, handleClose } = props;
   return (
     <BottomSheet visible={stockName.length > 0} handleOverlayClick={handleClose}>
       <InvestmentBankList
         stockName={stockName}
         investmentBanks={agents}
         handleClose={handleClose}
-        handleClick={onInvestmentBankClick}
+        handleClick={setIsShowingDisableStocksModal}
       />
     </BottomSheet>
   );

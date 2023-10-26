@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import OnboardingContent from "./OnBoardingContent";
 import AccountList from "./AccountList";
 import SelectedAccount from "./SelectedAccount";
@@ -65,7 +65,7 @@ const OnBoarding = () => {
       };
     });
   };
-  const buildSelectedAgentList = useCallback(() => {
+  const buildSelectedAgentList = () => {
     return selectedAgent.reduce((list, value, index) => {
       if (value) {
         return list.concat(index);
@@ -73,8 +73,7 @@ const OnBoarding = () => {
         return list;
       }
     }, [] as number[]);
-  }, [selectedAgent]);
-
+  };
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
   };
@@ -195,7 +194,7 @@ const OnBoarding = () => {
     if (step === 2) {
       setSelectedAgentNumber(buildSelectedAgentList());
     }
-  }, [step, buildSelectedAgentList]);
+  }, [step]);
 
   return (
     <OnboardingWrap>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, FC, SetStateAction } from "react";
+import { FC, useState } from "react";
 import TapMenu from "../common/TapMenu";
 import POPlan from "./POPlan";
 import PONewsList from "./PONewsList";
@@ -13,8 +13,6 @@ interface IPOTapMenuProps {
   listingAt: string;
   offerBeginAt: string;
   offerEndAt: string;
-  state: boolean;
-  setState: Dispatch<SetStateAction<boolean>>;
 }
 
 const IPOTapMenu: FC<IPOTapMenuProps> = ({
@@ -24,9 +22,9 @@ const IPOTapMenu: FC<IPOTapMenuProps> = ({
   listingAt,
   offerBeginAt,
   offerEndAt,
-  state,
-  setState,
 }) => {
+  const [state, setState] = useState(true);
+
   const handleChangeTapMenu = (value: boolean) => {
     setState(value);
   };

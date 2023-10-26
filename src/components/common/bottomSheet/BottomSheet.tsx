@@ -31,7 +31,7 @@ export const BottomSheet: FC<BottomSheetProps> = (props) => {
 
 const BottomSheetWrapper = styled.div`
   width: 375px;
-  height: 100vh;
+  height: calc(var(--var, 1vh) * 100);
 `;
 
 const BottomSheetBox = styled.div`

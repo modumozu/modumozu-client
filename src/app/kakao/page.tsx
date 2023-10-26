@@ -13,6 +13,7 @@ import styled from "styled-components";
 const Kakao = () => {
   const router = useRouter();
   const [agreedTerms, setAgreeTerms] = useState<number[]>([]);
+  const [isNewMember, setIsNewMember] = useState(false);
 
   const setTokens = () => {
     const searchParams = new URL(window.location.href).searchParams;
@@ -46,13 +47,23 @@ const Kakao = () => {
   };
 
   useEffect(() => {
-    let token = new URL(window.location.href).searchParams.get("accessToken");
+    const searchParams = new URL(window.location.href).searchParams;
+    const token = searchParams.get("accessToken");
+    const status = searchParams.get("status");
+
+    if (status === "ready") {
+      setIsNewMember(true);
+    } else {
+      setTokens();
+      router.push("/home");
+    }
 
     if (!token) {
       router.push("/");
     }
   }, [router]);
 
+  if (!isNewMember) return <DummyLoading>loading...</DummyLoading>;
   return (
     <BottomSheet visible={true} handleOverlayClick={() => {}}>
       <BottomSheetWrap>
@@ -79,6 +90,13 @@ const Kakao = () => {
 };
 
 export default Kakao;
+
+const DummyLoading = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;
 
 const BottomSheetWrap = styled.div`
   padding-bottom: 20px;

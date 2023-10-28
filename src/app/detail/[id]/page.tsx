@@ -13,8 +13,7 @@ import POInfo from "@/components/detail/POInfo";
 import queryKeys from "@/constants/queryKeys";
 import { useQuery } from "@tanstack/react-query";
 import { NextPage } from "next";
-import { useRef, useState } from "react";
-
+import { useState, useRef } from "react";
 
 interface DetailProps {
   params: { id: string };

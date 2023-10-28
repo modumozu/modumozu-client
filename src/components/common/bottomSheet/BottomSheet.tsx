@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import styled from "styled-components";
 import colors from "@/styles/colors";
 import Modal from "../Modal";

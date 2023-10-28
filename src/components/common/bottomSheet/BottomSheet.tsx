@@ -21,11 +21,6 @@ export interface BottomSheetProps {
 export const BottomSheet: FC<BottomSheetProps> = (props) => {
   const { visible, handleOverlayClick, children } = props;
 
-  useEffect(() => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
-  }, []);
-
   return (
     <Modal visible={visible} onOutsideClick={handleOverlayClick}>
       <BottomSheetWrapper>
@@ -37,10 +32,6 @@ export const BottomSheet: FC<BottomSheetProps> = (props) => {
 
 const BottomSheetWrapper = styled.div`
   width: 375px;
-  height: 100vh;
-  @supports (-webkit-appearance: none) and (stroke-color: transparent) {
-    min-height: -webkit-fill-available;
-  }
 `;
 
 const BottomSheetBox = styled.div`

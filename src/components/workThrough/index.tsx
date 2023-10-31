@@ -93,7 +93,7 @@ const WorkThroughWrap = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: calc(var(--var, 1vh) * 100);
+  min-height: calc(var(--vh, 1vh) * 100);
   height: 1vh;
   background-color: ${colors.WHITE};
   overflow: hidden;

@@ -23,6 +23,6 @@ const OverlayBox = styled.div`
   top: 0;
   left: 0;
   width: 100vw;
-  height: calc(var(--var, 1vh) * 100);
+  height: calc(var(--vh, 1vh) * 100);
   background-color: ${colors.BLACK_TRANSPARENT_SCALE[5]};
 `;

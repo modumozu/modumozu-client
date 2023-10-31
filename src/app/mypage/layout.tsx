@@ -22,5 +22,5 @@ export default MyLayout;
 
 const MainWrapper = styled.div`
   background-color: ${colors.WHITE};
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
 `;

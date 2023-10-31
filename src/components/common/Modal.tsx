@@ -30,11 +30,6 @@ const Modal: FC<ModalProps> = ({ visible, children, onOutsideClick }) => {
     }
   }, [visible]);
 
-  useEffect(() => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
-  }, []);
-
   return (
     <Portal>
       {visible && (
@@ -49,7 +44,7 @@ const Modal: FC<ModalProps> = ({ visible, children, onOutsideClick }) => {
 export default Modal;
 
 const ModalBackground = styled.div`
-  min-height: calc(var(--var, 1vh) * 100);
+  min-height: calc(var(--vh, 1vh) * 100);
   max-width: 375px;
   background-color: #0000007a;
   margin: 0 auto;

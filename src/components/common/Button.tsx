@@ -3,7 +3,7 @@ import { FontTypes, getFonts } from "@/styles/fonts";
 import { ButtonHTMLAttributes, FC } from "react";
 import styled from "styled-components";
 
-type Color = "primary" | "secondary";
+type Color = "primary" | "secondary" | "tertiary";
 type Size = "large" | "small";
 type Shape = "rectangle" | "round";
 
@@ -90,6 +90,18 @@ const getColor = ({ color = "primary", fill = "true", disabled = false }: Button
         background-color: rgba(212, 226, 254, 0.50);
       }
     `;
+  }
+  if (color === "tertiary") {
+    return `
+      background-color: ${colors.BLUE[1]};
+      color: ${colors.FONT.PRIMARY};
+      &: hover {
+        opacity: 0.8;
+      }
+      &: active {
+        background-color: ${colors.BLUE[2]}
+      }
+    `
   }
   if (fill === "true") {
     return `

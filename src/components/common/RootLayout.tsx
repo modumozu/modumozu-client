@@ -20,7 +20,7 @@ const RootLayoutStyle: FC<RootLayoutStyleProps> = ({ children }) => {
 export default RootLayoutStyle;
 
 const RootLayoutWrap = styled.div`
-  min-height: calc(var(--var, 1vh) * 100);
+  min-height: calc(var(--vh, 1vh) * 100);
   max-width: 375px;
   width: 100%;
   margin: 0 auto;

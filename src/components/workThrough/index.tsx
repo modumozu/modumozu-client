@@ -23,10 +23,13 @@ const WorkThrough = () => {
         return <WorkThroughMain />;
       case 2:
         return (
-          <WorkThroughContent
-            header={<Description>보유 계좌를 선택하면,</Description>}
-            content={<Image src="/images/step_1.png" width={262} height={556} alt="step1" />}
-          />
+          <>
+            <WorkThroughContent
+              header={<Description>보유 계좌를 선택하면,</Description>}
+              content={<Image src="/images/step_1.png" width={262} height={556} alt="step1"/>}
+              progress={step - 1}
+            />
+          </>
         );
       case 3:
         return (
@@ -39,7 +42,8 @@ const WorkThrough = () => {
                 <br />한 눈에 알 수 있어요
               </Description>
             }
-            content={<Image src="/images/step_2.png" width={262} height={556} alt="step2" />}
+            content={<Image src="/images/step2.png" width={347} height={556} alt="step2" />}
+            progress={step - 1}
           />
         );
       case 4:
@@ -55,6 +59,7 @@ const WorkThrough = () => {
               </Description>
             }
             content={<Image src="/images/step_3.png" width={262} height={556} alt="step3" />}
+            progress={step - 1}
           />
         );
       default:
@@ -72,10 +77,10 @@ const WorkThrough = () => {
       <ButtonWrap>
         {step <= 3 ? (
           <>
-            <Button width="100%" onClick={handleNextStepClick}>
+            <Button width="100%" onClick={handleNextStepClick} $font="BUTTON1_SEMIBOLD">
               {step > 1 ? "다음" : "시작"}
             </Button>
-            <Button width="100%" onClick={handleKakaoClick}>
+            <Button color="tertiary" width="100%" onClick={handleKakaoClick} $font="BUTTON1_SEMIBOLD">
               로그인
             </Button>
           </>
@@ -93,7 +98,7 @@ const WorkThroughWrap = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: calc(var(--var, 1vh) * 100);
+  min-height: calc(var(--vh, 1vh) * 100);
   height: 1vh;
   background-color: ${colors.WHITE};
   overflow: hidden;
@@ -117,7 +122,7 @@ const ButtonWrap = styled.div`
 const Description = styled.div`
   ${getFonts("H2_SEMIBOLD")}
   color:${colors.FONT_LIGHT.PRIMARY};
-  padding: 20px;
+  padding: 16px;
   white-space: pre-wrap;
 `;
 const StrongText = styled.span`

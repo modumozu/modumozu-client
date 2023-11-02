@@ -15,7 +15,7 @@ const EndedStock: FC<EndStockProps> = (props) => {
   const { stockName, logoPath, openDate, onClick } = props;
   const today = new Date();
   const curDate = new Date(today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate());
-  const isPublic = curDate > openDate;
+  const isPublic = openDate.getFullYear() === 2000 ? false : curDate > openDate;
 
   return (
     <Container onClick={onClick}>

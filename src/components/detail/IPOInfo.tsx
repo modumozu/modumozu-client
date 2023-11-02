@@ -9,10 +9,9 @@ import styled from "styled-components";
 import { BottomSheet } from "../common/bottomSheet/BottomSheet";
 import { BottomSheetGuide } from "../common/bottomSheet/BottomSheetGuide";
 import { getBankName } from "@/util/getBankName";
+import { useRouter } from "next/navigation";
 import Badge from "../common/Badge";
 import { Status } from "@/dto/detail";
-import { useRouter } from "next/navigation";
-
 
 export type BottomSheetStatus = "NONE" | "DEPOSIT" | "COMPETITION" | "RETENTION_COMMITMENT";
 

@@ -19,9 +19,12 @@ interface DetailProps {
   params: { id: string };
 }
 
+export type BottomSheetStatus = "NONE" | "DEPOSIT" | "COMPETITION" | "RETENTION_COMMITMENT";
+
 const Detail: NextPage<DetailProps> = ({ params }) => {
   const id = params.id;
   const [tabState, setTabState] = useState(true);
+  const [isModalShowing, setIsModalShowing] = useState<BottomSheetStatus>("NONE");
 
   const investCompetitionBox = useRef<HTMLDivElement>(null);
   const ipoConfirmBox = useRef<HTMLDivElement>(null);
@@ -94,6 +97,8 @@ const Detail: NextPage<DetailProps> = ({ params }) => {
             resetTabState={() => setTabState(true)}
             onScrollInvestCompetitionClick={handleScrollInvestCompetitionClick}
             onScrollIpoConfirmBoxClick={handleScrollIpoConfirmBoxClick}
+            isModalShowing={isModalShowing}
+            setIsModalShowing={setIsModalShowing}
           />
         </DetailCard.item>
         <DetailCard.item>
@@ -116,6 +121,8 @@ const Detail: NextPage<DetailProps> = ({ params }) => {
                 publicOfferingTotalPrice={data.publicOfferingTotalPrice}
                 publicOfferingAmount={data.publicOfferingAmount}
                 subscriptionDepositRate={data.subscriptionDepositRate}
+                isModalShowing={isModalShowing}
+                setIsModalShowing={setIsModalShowing}
               />
             </DetailCard.item>
             <DetailCard.item>

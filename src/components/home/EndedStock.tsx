@@ -3,33 +3,33 @@ import { getFonts } from "@/styles/fonts";
 import colors from "@/styles/colors";
 import { FC } from "react";
 import EndedStockLogo from "./EndedStockLogo";
+import dayjs, { Dayjs } from "dayjs";
 
 interface EndStockProps {
   stockName: string;
   logoPath: string;
-  openDate: Date;
+  openDate: Dayjs;
   onClick?: () => void;
 }
 
 const EndedStock: FC<EndStockProps> = (props) => {
   const { stockName, logoPath, openDate, onClick } = props;
-  const today = new Date();
-  const curDate = new Date(today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate());
-  const isPublic = openDate.getFullYear() === 2000 ? false : curDate > openDate;
+  const today = dayjs();
+  const curDate = dayjs(today.get("year") + "-" + (today.get("month") + 1) + "-" + today.get("day"));
+  const isPublic = openDate.get("year") === 2000 ? false : curDate > openDate;
 
   return (
     <Container onClick={onClick}>
       <EndedStockLogo isPublic={isPublic} path={logoPath} />
       <Title>{stockName}</Title>
       <Description color={colors.FONT_LIGHT.SECONDARY}>
-        {openDate.getFullYear() === 2000
+        {openDate.get("year") === 2000
           ? "상장 예정"
-          : `${openDate.getMonth() + 1}월 ${openDate.getDate()}일 상장 ${isPublic ? "완료" : "예정"}`}
+          : `${openDate.get("month") + 1}월 ${openDate.get("day")}일 상장 ${isPublic ? "완료" : "예정"}`}
       </Description>
     </Container>
   );
 };
-
 export default EndedStock;
 
 const Container = styled.div`

@@ -1,9 +1,10 @@
 "use client";
 
+import { BottomSheetStatus } from "@/app/detail/[id]/page";
 import colors from "@/styles/colors";
 import { getFonts } from "@/styles/fonts";
 import GuideIcon from "@/svg/GuideIcon";
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import styled from "styled-components";
 
 interface POInfoProps {
@@ -11,6 +12,8 @@ interface POInfoProps {
   publicOfferingTotalPrice: number;
   publicOfferingAmount: number;
   subscriptionDepositRate: number;
+  isModalShowing: string;
+  setIsModalShowing: Dispatch<SetStateAction<BottomSheetStatus>>;
 }
 
 const POInfo: FC<POInfoProps> = ({
@@ -18,6 +21,8 @@ const POInfo: FC<POInfoProps> = ({
   publicOfferingTotalPrice,
   publicOfferingAmount,
   subscriptionDepositRate,
+  isModalShowing,
+  setIsModalShowing,
 }) => {
   return (
     <POInfoWrap>
@@ -37,7 +42,7 @@ const POInfo: FC<POInfoProps> = ({
         <POInfoRow>
           <POIntoLabel>
             청약증거금율
-            <GuideIcon />
+            <GuideIcon onClick={() => setIsModalShowing("DEPOSIT")} />
           </POIntoLabel>
           <POInfoValue>{subscriptionDepositRate}%</POInfoValue>
         </POInfoRow>

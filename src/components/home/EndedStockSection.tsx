@@ -8,6 +8,7 @@ import { fetchEndedStocks } from "@/api/ipo";
 import { EndedStockType } from "@/types";
 import queryKeys from "@/constants/queryKeys";
 import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
 
 const EndedStockSection: FC = () => {
   const [page, setPage] = useState(0);
@@ -30,7 +31,7 @@ const EndedStockSection: FC = () => {
             key={stock.id}
             stockName={stock.name}
             logoPath={stock.logo}
-            openDate={new Date(stock.listingAt)}
+            openDate={dayjs(stock.listingAt)}
             onClick={() => router.push(`/detail/${stock.id}`)}
           />
         ))}

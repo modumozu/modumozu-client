@@ -14,6 +14,7 @@ import { useSetRecoilState } from "recoil";
 import { ToastAtom } from "@/recoil/toastState";
 import { modifyInterestingStock } from "@/api/interesting";
 import { getDiffDate } from "@/util/getDiffDate";
+import dayjs from "dayjs";
 
 interface UpcomingStockProps {
   children: ReactNode;
@@ -42,26 +43,25 @@ const UpcomingStockMain: FC<UpcomingStockProps> = ({ children }) => {
   return <article>{children}</article>;
 };
 const UpcomingStockStatus: FC<UpcomingStockStatusProps> = ({ startDate, endDate }) => {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  const current = new Date();
-  const today = new Date(current.getFullYear() + "-" + (current.getMonth() + 1) + "-" + current.getDate());
+  const start = dayjs(startDate);
+  const end = dayjs(endDate);
+  const today = dayjs();
   const diff = getDiffDate(startDate);
 
-  if (today < start) {
+  if (today.isBefore(start, "day")) {
     return (
       <UpcomingStockStatusWrap>
         <UpcomingStockStatusLabel color={colors.FONT_LIGHT.TERIARY}>D - {diff} </UpcomingStockStatusLabel>
-        <span>{`청약일 ${start.getMonth() + 1 + "월 " + start.getDate() + "일"}`}</span>
+        <span>{`청약일 ${start.get("month") + 1 + "월 " + start.get("day") + "일"}`}</span>
       </UpcomingStockStatusWrap>
     );
   }
-  if (today <= end) {
+  if (today.isBefore(end) || today.isSame(end)) {
     return (
       <UpcomingStockStatusWrap>
         <Dot />
         <UpcomingStockStatusLabel color={colors.FONT.ACCENT}> 진행 중 </UpcomingStockStatusLabel>
-        <span>{`마감일 ${end.getMonth() + 1 + "월 " + end.getDate() + "일"}`}</span>
+        <span>{`마감일 ${end.get("month") + 1 + "월 " + end.get("day") + "일"}`}</span>
       </UpcomingStockStatusWrap>
     );
   }
@@ -81,7 +81,7 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
     proposalAgent,
     handleCardClick,
   } = props;
-  const endDate = new Date(proposalEndDate);
+  const endDate = dayjs(proposalEndDate);
   const [pinned, setPinned] = useState(love);
   const setToastString = useSetRecoilState(ToastAtom);
 
@@ -105,7 +105,7 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
                 {getBankName(proposalAgent)?.slice(0, -2) + " "}
               </UpcomingStockSubscriptionDateText>
               <UpcomingStockSubscriptionText>
-                {endDate.getMonth() + 1 + "월" + endDate.getDate() + "일까지 개설 필요"}
+                {endDate.get("month") + 1 + "월" + endDate.get("day") + "일까지 개설 필요"}
               </UpcomingStockSubscriptionText>
             </span>
             <Button shape="round" size="small" onClick={onClick}>

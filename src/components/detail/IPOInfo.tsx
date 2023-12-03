@@ -4,7 +4,7 @@ import colors from "@/styles/colors";
 import { getFonts } from "@/styles/fonts";
 import CaretIcon from "@/svg/CaretIcon";
 import GuideIcon from "@/svg/GuideIcon";
-import { FC, ReactNode, useState } from "react";
+import { Dispatch, FC, ReactNode, SetStateAction, useState } from "react";
 import styled from "styled-components";
 import { BottomSheet } from "../common/bottomSheet/BottomSheet";
 import { BottomSheetGuide } from "../common/bottomSheet/BottomSheetGuide";
@@ -12,8 +12,7 @@ import { getBankName } from "@/util/getBankName";
 import { useRouter } from "next/navigation";
 import Badge from "../common/Badge";
 import { Status } from "@/dto/detail";
-
-export type BottomSheetStatus = "NONE" | "DEPOSIT" | "COMPETITION" | "RETENTION_COMMITMENT";
+import { BottomSheetStatus } from "@/app/detail/[id]/page";
 
 interface IPOInfoProps {
   status: Status;
@@ -28,6 +27,8 @@ interface IPOInfoProps {
   resetTabState: () => void;
   onScrollInvestCompetitionClick: () => void;
   onScrollIpoConfirmBoxClick: () => void;
+  isModalShowing: string;
+  setIsModalShowing: Dispatch<SetStateAction<BottomSheetStatus>>;
 }
 
 const IPOInfo: FC<IPOInfoProps> = (props) => {
@@ -44,8 +45,9 @@ const IPOInfo: FC<IPOInfoProps> = (props) => {
     fixedOfferPrice,
     onScrollInvestCompetitionClick,
     onScrollIpoConfirmBoxClick,
+    isModalShowing,
+    setIsModalShowing,
   } = props;
-  const [isModalShowing, setIsModalShowing] = useState<BottomSheetStatus>("NONE");
   const [isShowAllAgent, setIsShowAgent] = useState(false);
   const router = useRouter();
 

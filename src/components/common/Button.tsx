@@ -101,7 +101,7 @@ const getColor = ({ color = "primary", fill = "true", disabled = false }: Button
       &: active {
         background-color: ${colors.BLUE[2]}
       }
-    `
+    `;
   }
   if (fill === "true") {
     return `
@@ -132,14 +132,14 @@ const getDisabled = (fill: string, color: Color) => {
     if (fill === "true") {
       return `
       background-color: ${colors.BLUE[5]};
-      opacity: 80%;
+      opacity: 50%;
       color:${colors.WHITE};
       `;
     }
     return `
     background-color: ${colors.WHITE};
     color:${colors.FONT.PRIMARY};
-    opacity: 80%;
+    opacity: 50%;
     outline: 1px solid ${colors.BLUE[1]};
     `;
   }
@@ -196,6 +196,7 @@ const ButtonStyle = styled.button<ButtonStyleProps>`
   box-sizing: border-box;
   outline: 0;
   border: 0;
+  cursor: ${(props) => (props.disabled ? "default" : "pointer")};
   ${(props) => `
     width: ${props.width};
     ${getColor(props)}

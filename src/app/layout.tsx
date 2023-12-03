@@ -24,6 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <Script src="https://developers.kakao.com/sdk/js/kakao.js"></Script>
+        <Script
+          src="https://t1.kakaocdn.net/kakao_js_sdk/2.5.0/kakao.min.js"
+          integrity="sha384-kYPsUbBPlktXsY6/oNHSUDZoTX6+YI51f63jCPEIPFP09ttByAdxd2mEjKuhdqn4"
+          crossOrigin="anonymous"
+        ></Script>
       </head>
       <body>
         <RecoilRootWrapper>

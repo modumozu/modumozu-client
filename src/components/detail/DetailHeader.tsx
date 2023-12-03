@@ -7,13 +7,15 @@ import { updateDetailPin } from "@/api/ipo";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import queryKeys from "@/constants/queryKeys";
 import colors from "@/styles/colors";
+import KakaoShareButton from "./KakaoShareButton";
 
 interface DetailHeaderProps {
   id: number;
+  name: string;
   pinned: boolean;
 }
 
-const DetailHeader: FC<DetailHeaderProps> = ({ id, pinned }) => {
+const DetailHeader: FC<DetailHeaderProps> = ({ id, name, pinned }) => {
   const queryClient = useQueryClient();
   const { mutate } = useMutation(updateDetailPin, {
     onSuccess: () => {
@@ -23,8 +25,6 @@ const DetailHeader: FC<DetailHeaderProps> = ({ id, pinned }) => {
   const handlePinClick = () => {
     mutate(id);
   };
-  // TODO: 공유하기 구현
-  const handleShardClick = () => {};
 
   return (
     <PageHeader
@@ -35,7 +35,7 @@ const DetailHeader: FC<DetailHeaderProps> = ({ id, pinned }) => {
           ) : (
             <LikeBorderButton onClick={handlePinClick} />
           )}
-          <ShareButton />
+          <KakaoShareButton id={id} name={name} />
         </>
       }
     />
@@ -51,8 +51,4 @@ const LikeBorderButton = styled(HeartIcon.border)`
 const LikeFillButton = styled(HeartIcon.fill)`
   cursor: pointer;
   margin-right: 12px;
-`;
-
-const ShareButton = styled(ShareIcon)`
-  cursor: pointer;
 `;

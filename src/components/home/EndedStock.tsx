@@ -34,6 +34,7 @@ export default EndedStock;
 
 const Container = styled.div`
   width: 165.5px;
+  cursor: pointer;
 `;
 
 const Title = styled.h4`

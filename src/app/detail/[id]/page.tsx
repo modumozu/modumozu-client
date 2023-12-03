@@ -73,7 +73,7 @@ const Detail: NextPage<DetailProps> = ({ params }) => {
   }
   return (
     <>
-      <DetailHeader id={data.id} pinned={data.pinned} />
+      <DetailHeader id={data.id} name={data.name} pinned={data.pinned} />
       <DetailTitle
         name={data.name}
         category={data.category}

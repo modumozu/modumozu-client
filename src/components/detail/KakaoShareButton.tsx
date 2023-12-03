@@ -9,14 +9,15 @@ interface KakaoShareButtonProps {
 
 const KakaoShareButton: FC<KakaoShareButtonProps> = (props) => {
   const { id, name } = props;
+  const kakao = (window as any).Kakao;
 
   useEffect(() => {
-    Kakao.cleanup();
-    Kakao.init(String(process.env.NEXT_PUBLIC_KAKAO_KEY));
+    kakao.cleanup();
+    kakao.init(String(process.env.NEXT_PUBLIC_KAKAO_KEY));
   }, []);
 
   const handleShardClick = () => {
-    Kakao.Share.sendDefault({
+    kakao.Share.sendDefault({
       objectType: "feed",
       content: {
         title: name,

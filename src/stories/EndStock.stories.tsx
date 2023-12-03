@@ -1,5 +1,6 @@
 import EndedStock from "@/components/home/EndedStock";
 import type { Meta, StoryObj } from "@storybook/react";
+import dayjs from "dayjs";
 
 const meta = {
   title: "Home/EndedStock",
@@ -14,7 +15,7 @@ export const BeforePublic: Story = {
   args: {
     stockName: "시큐레터",
     logoPath: "",
-    openDate: new Date("2029-08-30"),
+    openDate: dayjs("2029-08-30"),
   },
 };
 
@@ -22,7 +23,7 @@ export const LongName: Story = {
   args: {
     stockName: "큐리옥스바이오시스템템",
     logoPath: "",
-    openDate: new Date("2023-08-15"),
+    openDate: dayjs("2023-08-15"),
   },
 };
 
@@ -30,6 +31,6 @@ export const Done: Story = {
   args: {
     stockName: "스마트레이더시스템",
     logoPath: "",
-    openDate: new Date("2023-08-15"),
+    openDate: dayjs("2023-08-15"),
   },
 };

@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { FC } from "react";
 import HeartIcon from "@/svg/HeartIcon";
 import styled from "styled-components";
@@ -15,6 +15,7 @@ import { ToastAtom } from "@/recoil/toastState";
 import { modifyInterestingStock } from "@/api/interesting";
 import { getDiffDate } from "@/util/getDiffDate";
 import dayjs from "dayjs";
+import { usePathname } from "next/navigation";
 
 interface UpcomingStockProps {
   children: ReactNode;
@@ -84,6 +85,11 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
   const endDate = dayjs(proposalEndDate);
   const [pinned, setPinned] = useState(love);
   const setToastString = useSetRecoilState(ToastAtom);
+  const pathName = usePathname();
+
+  useEffect(() => {
+    setPinned(love);
+  }, [love]);
 
   const renderSubscription = () => {
     switch (cardType) {
@@ -141,7 +147,11 @@ const UpcomingStockCard: FC<UpcomingStockCardProps> = (props) => {
           </div>
           {pinned && (
             <HeartButton
-              onClick={() => {
+              onClick={(e) => {
+                if (pathName.includes("home")) {
+                  return;
+                }
+                e.stopPropagation();
                 modifyInterestingStock(id);
                 setPinned((prev) => !prev);
                 setToastString("관심 공모주에서 삭제되었어요.");

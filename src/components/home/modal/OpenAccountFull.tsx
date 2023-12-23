@@ -20,8 +20,7 @@ interface OpenAccountFullProps {
 
 const OpenAccountFull: FC<OpenAccountFullProps> = (props) => {
   const { agentId, handleClose, stockList } = props;
-  // const after20BusiDate = getDateAfter20BusinessDays();
-  const after20BusiDate = dayjs().add(26, "day");
+  const after20BusiDate = getDateAfter20BusinessDays();
   return (
     <FullScreenModal visible={agentId > 0} setInvisible={handleClose}>
       <FullScreenModalDescription>
@@ -35,7 +34,7 @@ const OpenAccountFull: FC<OpenAccountFullProps> = (props) => {
         </p>
       </FullScreenModalDescription>
       {stockList
-        .filter((item) => dayjs(item.proposal.needAt) < after20BusiDate)
+        .filter((item) => new Date(item.proposal.needAt) < after20BusiDate)
         .filter((item) => item.remainAgents.length === 0 && !item.nonRemainAgents.includes(agentId))
         .filter((item) => !item.nonRemainAgents.some((agent) => limitlessAgent.includes(agent)))
         .map((data) => (

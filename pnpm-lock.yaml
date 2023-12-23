@@ -11,6 +11,9 @@ dependencies:
   '@tanstack/react-query':
     specifier: ^4.36.1
     version: 4.36.1(react-dom@18.2.0)(react@18.2.0)
+  '@tanstack/react-query-devtools':
+    specifier: ^5.14.5
+    version: 5.14.5(@tanstack/react-query@4.36.1)(react@18.2.0)
   '@types/node':
     specifier: 20.4.10
     version: 20.4.10
@@ -33,8 +36,8 @@ dependencies:
     specifier: 13.4.13
     version: 13.4.13(eslint@8.47.0)(typescript@5.1.6)
   korean-business-day:
-    specifier: ^3.1.0
-    version: 3.1.0
+    specifier: ^3.2.0
+    version: 3.2.0
   next:
     specifier: 13.4.13
     version: 13.4.13(@babel/core@7.22.10)(react-dom@18.2.0)(react@18.2.0)
@@ -4315,6 +4318,21 @@ packages:
 
   /@tanstack/query-core@4.36.1:
     resolution: {integrity: sha512-DJSilV5+ytBP1FbFcEJovv4rnnm/CokuVvrBEtW/Va9DvuJ3HksbXUJEpI0aV1KtuL4ZoO9AVE6PyNLzF7tLeA==}
+    dev: false
+
+  /@tanstack/query-devtools@5.14.5:
+    resolution: {integrity: sha512-xM8BQbE4FBAVEPr8t6MFbOJP+canDFz0hcY9Ho+5Z4LQciC60wE+7ZALx5n3InP4R7IELx8AodS5G3KYzBAwCg==}
+    dev: false
+
+  /@tanstack/react-query-devtools@5.14.5(@tanstack/react-query@4.36.1)(react@18.2.0):
+    resolution: {integrity: sha512-aDntW1dWc/feVUYwVqfM/r5OXa3RN06VhtYrTYW9fhj0Ks2dJw6Diknh9VpYqhI+gJrhVID95Rv/ZzS6W2lANA==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.14.2
+      react: ^18.0.0
+    dependencies:
+      '@tanstack/query-devtools': 5.14.5
+      '@tanstack/react-query': 4.36.1(react-dom@18.2.0)(react@18.2.0)
+      react: 18.2.0
     dev: false
 
   /@tanstack/react-query@4.36.1(react-dom@18.2.0)(react@18.2.0):
@@ -9118,8 +9136,8 @@ packages:
     engines: {node: '>= 8'}
     dev: true
 
-  /korean-business-day@3.1.0:
-    resolution: {integrity: sha512-T2iiXVL8Qp+xomeMkLKYmFXkqZVdriG007DxlHHZEFRS5ytfaK4taE9qycKSlXXnKv2rU2kCEvRZT/Xrodhdmg==}
+  /korean-business-day@3.2.0:
+    resolution: {integrity: sha512-17K2fIVma5Bs8bTy0YG+B6twdeJZX+ZhNPPVL4uAQzSOIEEBZLRIoZVMVw4D3FTESJyo6ZmOYAEG/Jfdi8VEsw==}
     dev: false
 
   /language-subtag-registry@0.3.22:
